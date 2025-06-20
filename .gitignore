@@ -1,0 +1,8 @@
+*.class
+.vscode/
+.idea/
+.bin/
+jogo.iml
+RefatorandoTab.iml
+RefactoredBoardGame2.iml
+RefactoredBoardGame.iml
