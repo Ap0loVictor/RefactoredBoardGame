@@ -5,13 +5,16 @@
   - Cada movimento de um competidor é determinado por dois dados e o competidor andará o número de casas igual à soma dos valores dos dois dados. 
 
 Existem 3 tipos de jogador: jogador com sorte, cuja soma dos valores dos dados é sempre maior ou igual à 7, O jogador azarado, cuja soma dos valores dos dados é sempre menor ou igual a 6, e o jogador normal, que pode obter tanto valores altos como baixos para a soma dos dados. 
-
 (Já implementado mas acho interessante deixar aqui para uma base do jogo)
+
 ---
+
 - O tabuleiro:
 
   - O tabuleiro deve ser uma classe que contém um ArrayList de jogadores e outro de casas e os métodos que você achar necessários. As casas devem seguir uma hierarquia, sendo a classe mãe abstrata possuindo o atributo número e declarando o método aplicarRegra().
+
 ---
+
 - Classes filhas podem ser do tipo:
 
   * Simples: não aplica nenhuma regra;
@@ -22,9 +25,10 @@ Existem 3 tipos de jogador: jogador com sorte, cuja soma dos valores dos dados �
   * Reversa: se o jogador parar em uma delas, ele troca de lugar com o jogador que está mais atrás no jogo. Caso ele seja o último, ele não sai do lugar.
   * JogaDeNovo: o jogador irá jogar os dados mais uma vez.
   - **Fique livre para propor casas com outras regras**
-
 (Já implementado mas acho interessante deixar aqui em caso de refatoração desses campos)
+
 ---
+
 - Requisitos:
 
   - O jogo tem que ter pelo menos dois jogadores de tipos diferentes, mas pode haver dois ou mais jogadores do mesmo tipo.
@@ -37,13 +41,15 @@ Existem 3 tipos de jogador: jogador com sorte, cuja soma dos valores dos dados �
   - Você tem que mostrar o vencedor
   - Você deve mostrar a quantidade de jogadas de cada jogador ao final do jogo e a posição de cada um.
   - Você pode usar uma interface gráfica, se quiser.
+
 ---
+
 - Parte dos padrões.
 
-  - Você deve usar o padrão Strategy para representar a hierarquia de casas e seleção de casas;
-  - Você deve usar o padrão Factory para criar jogadores e casas no tabuleiro;
-  - Você deve usar o padrão Singleton para garantir que só pode ter 1 tabuleiro;
-  - Você deve criar uma classe Jogo, que funcionará como um Facade, de forma que ele implemente pelo menos os seguintes métodos conforme mostrados na classe Main:
+  - Você deve usar o padrão **Strategy** para representar a hierarquia de casas e seleção de casas;
+  - Você deve usar o padrão **Factory** para criar jogadores e casas no tabuleiro;
+  - Você deve usar o padrão **Singleton** para garantir que só pode ter 1 tabuleiro;
+  - Você deve criar uma classe Jogo, que funcionará como um **Facade**, de forma que ele implemente pelo menos os seguintes métodos conforme mostrados na classe Main:
 
 ```
 public class Main {
