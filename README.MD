@@ -65,13 +65,23 @@ casas;
 - Você deve criar uma classe Jogo, que funcionará como um Facade, de forma que ele implemente pelo menos os seguintes métodos conforme mostrados na classe Main:
 
 public class Main {
+
 public static void main(String args[]){
+
 Jogo jogo = new Jogo();
+
 int numCasas = // ler do teclado o número de casas
+
 int numJogadores = // ler do teclado o número de casas;
+
 jogo.configTabuleiro(numCasas);
+
 jogo.config(numJogadores);
+
 jogo.printTabuleiro();
+
 jogo.start();
+
 }
+
 }
