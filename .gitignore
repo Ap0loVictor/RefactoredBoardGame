@@ -2,6 +2,7 @@
 .vscode/
 .idea/
 .bin/
+.out/
 jogo.iml
 RefatorandoTab.iml
 RefactoredBoardGame2.iml
