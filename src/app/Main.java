@@ -1,4 +1,5 @@
 package app;
+import factory.JogadorFactory;
 import jogadores.*;
 import tabuleiro.*;
 import java.util.Scanner;
@@ -20,7 +21,7 @@ public class Main {
             vencedor = tabuleiro.verificarVencedor();
             System.out.println("=============================================");
             if (tabuleiro.getJogadores().size() < 6 && flagAd) {
-                System.out.println("        1- Adicionar Jogadores.Jogador");
+                System.out.println("        1- Adicionar Jogador");
             }
             if(vencedor == null){
                 System.out.println("        2- Jogar");
@@ -76,22 +77,9 @@ public class Main {
 
             String escolhaFeita = coresDisponiveis.get(opcCor - 1);
             coresDisponiveis.remove(opcCor - 1);
-            Jogador jogador = null;
-                switch (opcTipo) {
-                    case 1:
-                        jogador = new JogadorAzarado(escolhaFeita);
-                        break;
-                    case 2:
-                        jogador = new JogadorSortudo(escolhaFeita);
-                        break;
-                    case 3:
-                        jogador = new JogadorNormal(escolhaFeita);
-                        break;
-                    default:
-                        System.out.println("Opção de tipo inválida.");
-                        continue;
-                }
-                tabuleiro.adicionarJogador(jogador);
+            Jogador jogador = JogadorFactory.criarJogador(opcTipo, escolhaFeita);
+            tabuleiro.adicionarJogador(jogador);
+
             } else if (opc == 2) {
                 flagAd = false;
                 int opc2;
