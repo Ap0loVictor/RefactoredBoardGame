@@ -1,7 +1,7 @@
 package casas;
 import jogadores.*;
 import java.util.List;
-// Codigo da desgraça
+
 public class CasaMagica extends Casa {
     public CasaMagica(int indiceCasa){
         super(indiceCasa);
