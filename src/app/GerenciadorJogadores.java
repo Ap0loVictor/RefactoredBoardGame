@@ -7,7 +7,7 @@ import java.util.Scanner;
 import java.util.Set;
 
 import jogadores.Jogador;
-import tabuleiro.Tabuleiro;
+
 
 public class GerenciadorJogadores {
     private List<Jogador> jogadores;
@@ -32,10 +32,7 @@ public class GerenciadorJogadores {
         for (Jogador j : jogadores) {
             tipos.add(j.getClass());
         }
-        if (tipos.size() < 2) {
-            return false;
-        }
-        return true;
+        return tipos.size() >= 2;
     }
 
     public Jogador verificarVencedor(int numCasas) {
@@ -47,11 +44,11 @@ public class GerenciadorJogadores {
     return null;
 }
 
-    private void ExibirVencedor(Jogador jogador, ArrayList<Jogador> jogadores){
+    private void exibirVencedor(Jogador jogador, ArrayList<Jogador> jogadores){
         System.out.println("=============================================");
         System.out.println("O jogador " + jogador.getCor() + " venceu !");
-        for(int i = 0; i < jogadores.size();  i++){
-            System.out.println("Número de jogadas do jogador " + jogadores.get(i).getCor() + ": " +jogadores.get(i).getJogadas());
+        for (Jogador jogadore : jogadores) {
+            System.out.println("Número de jogadas do jogador " + jogadore.getCor() + ": " + jogadore.getJogadas());
         }
         System.out.println("=============================================");
     }

@@ -1,6 +1,9 @@
 package factory;
 import jogadores.*;
 public class JogadorFactory {
+    private JogadorFactory(){
+
+    }
     public static Jogador criarJogador(int opcTipo, String cor) {
         switch (opcTipo) {
             case 1:
