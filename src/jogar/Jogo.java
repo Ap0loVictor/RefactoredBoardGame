@@ -1,7 +1,7 @@
 package jogar;
 
 import jogadores.*;
-import tabuleiro.Tabuleiro;
+import tabuleiro.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,7 +16,8 @@ public class Jogo {
 
     public Jogo() {
         this.scanner = new Scanner(System.in);
-        this.tabuleiro = new Tabuleiro();
+        InstanciarTabuleiro instanciar = new InstanciarTabuleiro();
+        this.tabuleiro = instanciar.configurarTabuleiro();
         this.coresDisponiveis = new ArrayList<>(
             Arrays.asList("Vermelho", "Verde", "Azul", "Amarelo", "Preto", "Branco")
         );
