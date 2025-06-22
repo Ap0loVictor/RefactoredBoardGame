@@ -77,10 +77,8 @@ public class Main {
 
             String escolhaFeita = coresDisponiveis.get(opcCor - 1);
             coresDisponiveis.remove(opcCor - 1);
-            if(tabuleiro.validarTiposDeJogadores()){
-                Jogador jogador = JogadorFactory.criarJogador(opcTipo, escolhaFeita);
-                tabuleiro.adicionarJogador(jogador);
-            }
+            Jogador jogador = JogadorFactory.criarJogador(opcTipo, escolhaFeita);
+            tabuleiro.adicionarJogador(jogador);
 
             } else if (opc == 2) {
                 flagAd = false;
