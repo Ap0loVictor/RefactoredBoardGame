@@ -9,7 +9,8 @@ import java.util.Arrays;
 public class Main {
     public static void main(String[] args) throws Exception {
         Scanner scanner = new Scanner(System.in);
-        Tabuleiro tabuleiro = new Tabuleiro();
+        InstanciarTabuleiro instanciar = new InstanciarTabuleiro();
+        Tabuleiro tabuleiro = instanciar.configurarTabuleiro();
         int opc, opcTipo;
         ArrayList<String> coresDisponiveis = new ArrayList<>();
         coresDisponiveis.addAll(Arrays.asList("Vermelho", "Verde", "Azul", "Amarelo", "Preto", "Branco"));
