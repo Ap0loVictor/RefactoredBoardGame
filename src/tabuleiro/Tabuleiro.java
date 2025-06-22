@@ -98,12 +98,10 @@ public class Tabuleiro {
         return gerenciadorJogadores.adicionarJogador(jogador);
     }
 
-    public boolean validarTiposDeJogadores() {
-        return gerenciadorJogadores.validarTiposDeJogadores();
-    }
+
 
     public boolean inicarJogo() {
-        return validarTiposDeJogadores();
+        return gerenciadorJogadores.validarTiposDeJogadores();
     }
 
     public Jogador verificarVencedor() {

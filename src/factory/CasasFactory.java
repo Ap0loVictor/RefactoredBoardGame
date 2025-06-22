@@ -1,8 +1,9 @@
 package factory;
 import casas.*;
 public class CasasFactory {
+    private CasasFactory() {}
     public static Casa criarCasa(int pos) {
-        if(pos == 10 || pos == 25 || pos == 38){
+        if(pos == 10 || pos == 25 || pos == 38) {
             return new CasaStop(pos);
         }
         if(pos == 13){

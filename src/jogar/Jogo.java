@@ -1,5 +1,6 @@
 package jogar;
 
+import factory.JogadorFactory;
 import jogadores.*;
 import tabuleiro.*;
 
@@ -7,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
-
+import tabuleiro.*;
 public class Jogo {
     private final Scanner scanner;
     private final Tabuleiro tabuleiro;
@@ -81,16 +82,7 @@ public class Jogo {
         }
         int idxCor = lerInt("Escolha uma cor: ", 1, coresDisponiveis.size()) - 1;
         String cor = coresDisponiveis.remove(idxCor);
-
-        Jogador j;
-        switch (tipo) {
-            case 1: j = new JogadorAzarado(cor); break;
-            case 2: j = new JogadorSortudo(cor);  break;
-            case 3: j = new JogadorNormal(cor);   break;
-            default:
-                System.out.println("Tipo inválido. Abortando cadastro.");
-                return;
-        }
+        Jogador j = JogadorFactory.criarJogador(tipo, cor);
         tabuleiro.adicionarJogador(j);
         System.out.println("Jogador " + j.getCor() + " adicionado.");
     }
