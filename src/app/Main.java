@@ -1,6 +1,5 @@
 // src/app/Main.java
 package app;
-
 import jogar.Jogo;
 
 public class Main {
