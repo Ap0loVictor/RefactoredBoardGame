@@ -7,66 +7,92 @@ import app.GerenciadorJogadores;
 
 public class Tabuleiro {
     private GerenciadorJogadores gerenciadorJogadores;
-    private int[] casas;
+    private ArrayList[] casas;
     private Random random;
     private List<Jogador>[][] tabuleiroVisual;
     private Scanner scanner = new Scanner(System.in);
 
-    public Tabuleiro() {
-        this.casas = new int[40];
+    private int totalCasas;
+    private int linhas;
+    private int colunas;
+
+    public Tabuleiro(int totalCasas) {
         this.random = new Random();
         this.gerenciadorJogadores = new GerenciadorJogadores();
-        this.tabuleiroVisual = new List[4][10];
+        this.totalCasas = totalCasas;
 
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 10; j++) {
+        this.colunas = 10;
+        this.linhas = totalCasas / 10;
+        if (totalCasas % 10 != 0) {
+            this.linhas++;
+        }
+
+        this.casas = new ArrayList[totalCasas];
+        for (int i = 0; i < totalCasas; i++) {
+            this.casas[i] = new ArrayList<>();
+        }
+
+        this.tabuleiroVisual = new List[linhas][colunas];
+        for (int i = 0; i < linhas; i++) {
+            for (int j = 0; j < colunas; j++) {
                 tabuleiroVisual[i][j] = new ArrayList<>();
             }
         }
     }
 
     public void atualizarTabuleiroVisual() {
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 10; j++) {
+        for (int i = 0; i < linhas; i++) {
+            for (int j = 0; j < colunas; j++) {
                 tabuleiroVisual[i][j].clear();
             }
         }
         for (Jogador jogador : gerenciadorJogadores.getJogadores()) {
-            if (jogador.getPosicao() >= 40) {
-                jogador.setPosicao(40);
+            if (jogador.getPosicao() >= totalCasas) {
+                jogador.setPosicao(totalCasas);
             }
-            if (jogador.getPosicao() < 40) {
-                int linha = jogador.getPosicao() / 10;
-                int coluna = jogador.getPosicao() % 10;
+            if (jogador.getPosicao() < totalCasas) {
+                int linha = jogador.getPosicao() / colunas;
+                int coluna = jogador.getPosicao() % colunas;
                 tabuleiroVisual[linha][coluna].add(jogador);
             }
         }
     }
 
     public void imprimirTabuleiroVisual() {
-        System.out.println("\n============= tabuleiro.Tabuleiro Visual =============");
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 10; j++) {
-                int numeroCasa = i * 10 + j;
-                System.out.print(numeroCasa + ".[" + tabuleiroVisual[i][j].size() + "]\t");
+        System.out.println("\n============= Tabuleiro Visual =============");
+        for (int i = 0; i < linhas; i++) {
+            for (int j = 0; j < colunas; j++) {
+                int numeroCasa = i * colunas + j;
+                if (numeroCasa >= totalCasas){
+                break;
+                }
+            System.out.print(numeroCasa + ".[" + tabuleiroVisual[i][j].size() + "]\t");
             }
-            System.out.println();
+        System.out.println();
         }
-        int jogadoresNaCasa40 = 0;
+        int jogadoresNaUltimaCasa = 0;
         for (Jogador jogador : gerenciadorJogadores.getJogadores()) {
-            if (jogador.getPosicao() == 40) {
-                jogadoresNaCasa40++;
+            if (jogador.getPosicao() == totalCasas) {
+                jogadoresNaUltimaCasa++;
             }
         }
-        System.out.println("40.[" + jogadoresNaCasa40 + "]");
+        System.out.println(totalCasas + ".[" + jogadoresNaUltimaCasa + "]");
         System.out.println("=================================");
-
-        System.out.println("\nLegenda dos Jogadores:");
+        legendaJogadores();
+    }
+    
+    public void legendaJogadores(){
+    System.out.println("\nLegenda dos Jogadores:");
         for (Jogador jogador : gerenciadorJogadores.getJogadores()) {
             System.out.println(jogador.getClass().getSimpleName() + " | " + jogador.getCor() + " | Posição " + jogador.getPosicao());
         }
         System.out.println("=================================\n");
     }
+
+    
+
+    // os métodos abaixo provavelmnete vão desaparecer com a utilização do facade e refatoração geral de classes. 
+    // por enquanto estarão aí pro funcionamento prévio do código
 
     public boolean adicionarJogador(Jogador jogador) {
         return gerenciadorJogadores.adicionarJogador(jogador);
@@ -79,7 +105,7 @@ public class Tabuleiro {
     }
 
     public Jogador verificarVencedor() {
-        return gerenciadorJogadores.verificarVencedor(casas.length);
+        return gerenciadorJogadores.verificarVencedor(totalCasas);
     }
 
     public void jogarRodada(boolean modoDebug) {
@@ -121,7 +147,7 @@ public class Tabuleiro {
                     }
                     jogador.avancar(opc);
 
-                    if (jogador.getPosicao() >= 40) {
+                    if (jogador.getPosicao() >= totalCasas) {
                         vencer(jogador, jogadores);
                         return;
                     }
@@ -137,7 +163,7 @@ public class Tabuleiro {
                     System.out.println("Dados rolados: " + dados[0] + " + " + dados[1] + " = " + soma);
                     jogador.avancar(soma);
 
-                    if (jogador.getPosicao() >= 40) {
+                    if (jogador.getPosicao() >= totalCasas) {
                         vencer(jogador, jogadores);
                         return;
                     }
@@ -154,7 +180,7 @@ public class Tabuleiro {
 
     private void vencer(Jogador jogador, List<Jogador> jogadores) {
         System.out.println("=============================================");
-        System.out.println("O jogador " + jogador.getCor() + " venceu !");
+        System.out.println("O jogador " + jogador.getCor() + " venceu!");
         for (Jogador j : jogadores) {
             System.out.println("Número de jogadas do jogador " + j.getCor() + ": " + j.getJogadas());
         }
@@ -176,11 +202,11 @@ public class Tabuleiro {
         }
     }
 
-    public int[] getCasas() {
+    public ArrayList[] getCasas() {
         return casas;
     }
 
-    public void setCasas(int[] casas) {
+    public void setCasas(ArrayList[] casas) {
         this.casas = casas;
     }
 
