@@ -99,7 +99,6 @@ public class Tabuleiro {
     }
 
 
-
     public boolean inicarJogo() {
         return gerenciadorJogadores.validarTiposDeJogadores();
     }
