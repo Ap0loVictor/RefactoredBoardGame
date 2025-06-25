@@ -4,7 +4,7 @@ public class JogadorFactory {
     private JogadorFactory(){
 
     }
-    public static Jogador criarJogador(int opcTipo, String cor) {
+    public static Jogador criarJogador(int opcTipo, Cor cor) {
         switch (opcTipo) {
             case 1:
                 return new JogadorAzarado(cor);
