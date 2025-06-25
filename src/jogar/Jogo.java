@@ -74,7 +74,8 @@ public class Jogo {
             System.out.printf(" %d- %s%n", i + 1, coresDisponiveis.get(i));
         }
         int idxCor = lerInt("Escolha uma cor: ", 1, coresDisponiveis.size()) - 1;
-        String cor = coresDisponiveis.remove(idxCor);
+        String nomeCor = coresDisponiveis.remove(idxCor);
+        Cor cor = new Cor(nomeCor);
         Jogador j = JogadorFactory.criarJogador(tipo, cor);
         tabuleiro.adicionarJogador(j);
         System.out.println("Jogador " + j.getCor() + " adicionado.");

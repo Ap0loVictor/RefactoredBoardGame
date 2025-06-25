@@ -4,7 +4,7 @@ import java.util.Random;
 
 
 public class JogadorAzarado extends Jogador {
-    public JogadorAzarado(String cor){
+    public JogadorAzarado(Cor cor){
         super(cor);
     }
     @Override
