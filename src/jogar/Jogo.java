@@ -8,19 +8,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
-import tabuleiro.*;
 public class Jogo {
     private final Scanner scanner;
     private final Tabuleiro tabuleiro;
     private final List<String> coresDisponiveis;
     private boolean podeAdicionar = true;
-
+    private GerenciadorJogadores gerenciadorJogadores = new GerenciadorJogadores();
+    private InstanciarTabuleiro instanciar = new InstanciarTabuleiro();
     public Jogo() {
         this.scanner = new Scanner(System.in);
-        InstanciarTabuleiro instanciar = new InstanciarTabuleiro();
         this.tabuleiro = instanciar.configurarTabuleiro();
         this.coresDisponiveis = new ArrayList<>(
-            Arrays.asList("Vermelho", "Verde", "Azul", "Amarelo", "Preto", "Branco")
+                Arrays.asList("Vermelho", "Verde", "Azul", "Amarelo", "Preto", "Branco")
         );
     }
 
@@ -28,7 +27,7 @@ public class Jogo {
     public void start() {
         int opc;
         do {
-            Jogador vencedor = tabuleiro.verificarVencedor();
+            Jogador vencedor = gerenciadorJogadores.verificarVencedor(instanciar.perguntarNumeroDeCasas());
             printMenu(vencedor == null);
 
             opc = lerInt("Escolha uma opção: ");
@@ -58,7 +57,9 @@ public class Jogo {
 
         scanner.close();
     }
-
+    public Tabuleiro configTabuleiro(int numCasas) {
+        return tabuleiro;
+    }
     private void printMenu(boolean semVencedor) {
         System.out.println("\n=============================================");
         if (tabuleiro.getJogadores().size() < 6 && podeAdicionar) {
@@ -103,7 +104,7 @@ public class Jogo {
             tabuleiro.atualizarTabuleiroVisual();
             tabuleiro.imprimirTabuleiroVisual();
 
-            Jogador vencedor = tabuleiro.verificarVencedor();
+            Jogador vencedor = gerenciadorJogadores.verificarVencedor(instanciar.perguntarNumeroDeCasas());
             if (vencedor != null) {
                 System.out.println("\nO jogador " + vencedor.getCor() + " venceu! Fim da partida.");
                 break;
@@ -112,7 +113,7 @@ public class Jogo {
     }
 
     /** Lê um inteiro genérico */
-    private int lerInt(String prompt) {
+    public int lerInt(String prompt) {
         System.out.print(prompt);
         while (!scanner.hasNextInt()) {
             System.out.print("Entrada inválida. " + prompt);
@@ -124,7 +125,7 @@ public class Jogo {
     }
 
     /** Lê um inteiro dentro de um intervalo [min..max] */
-    private int lerInt(String prompt, int min, int max) {
+    public int lerInt(String prompt, int min, int max) {
         int val;
         do {
             val = lerInt(prompt);
