@@ -7,9 +7,13 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         Jogo jogo = new Jogo();
-        jogo.printMenuInicial();
+        jogo.printMenuCasas();
         int numCasas = scanner.nextInt();
         jogo.configTabuleiro(numCasas);
+        jogo.printMenuJogadores();
+        int numJogadores = scanner.nextInt();
+        jogo.config(numJogadores);
+
         jogo.start();
     }
 }

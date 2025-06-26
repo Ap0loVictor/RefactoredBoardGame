@@ -1,5 +1,6 @@
 package jogar;
 
+import app.GerenciadorJogadores;
 import factory.CasasFactory;
 import factory.JogadorFactory;
 import jogadores.*;
@@ -18,24 +19,22 @@ public class Jogo {
 
     public Jogo() {
         this.scanner = new Scanner(System.in);
-        this.tabuleiro = configTabuleiro();
+        this.tabuleiro = new Tabuleiro(0, true);
         this.coresDisponiveis = new ArrayList<>(
-            Arrays.asList("Vermelho", "Verde", "Azul", "Amarelo", "Preto", "Branco")
-        );
+            Arrays.asList("Vermelho", "Verde", "Azul", "Amarelo", "Preto", "Branco"));
     }
 
-    public void printMenuInicial() {
-        System.out.println("=============================================");
-        System.out.println("              CORRIDA MALUCA!                 ");
-        System.out.println("=============================================\n\n");
+    public void printMenuCasas() {
+        System.out.println(" -------- CORRIDA MALUCA! ------\n\n");
         System.out.println("Digite o número de casas que preferir para iniciar a corrida : ");
     }
-
+    public void printMenuJogadores() {
+        System.out.println("Digite o numero de jogadores : ");
+    }
     public Tabuleiro configTabuleiro(int numCasas) {
-        int totalCasas = tabuleiro.perguntarNumeroDeCasas();
-        Tabuleiro tab = new Tabuleiro(totalCasas);
-        tabuleiro.configCasas(totalCasas);
-        return new Tabuleiro(totalCasas);
+        Tabuleiro tab = new Tabuleiro(numCasas);
+        tabuleiro.configCasas(numCasas);
+        return new Tabuleiro(numCasas);
     }
 
     /** Inicia todo o fluxo do jogo */
@@ -72,7 +71,11 @@ public class Jogo {
 
         scanner.close();
     }
-
+    public void config(int numJogadores) {
+        for(int i = 0; i < numJogadores; i++) {
+            fluxoAdicionarJogador();
+        }
+    }
     private void printMenu(boolean semVencedor) {
         System.out.println("\n=============================================");
         if (tabuleiro.getJogadores().size() < 6 && podeAdicionar) {
@@ -115,7 +118,7 @@ public class Jogo {
             tabuleiro.jogarRodada(inserirCasas);
 
             tabuleiro.atualizarTabuleiroVisual();
-            tabuleiro.imprimirTabuleiroVisual();
+           // tabuleiro.imprimirTabuleiroVisual();
 
             Jogador vencedor = tabuleiro.verificarVencedor();
             if (vencedor != null) {

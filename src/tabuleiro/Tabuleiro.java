@@ -69,14 +69,17 @@ public class Tabuleiro {
     public void printTabuleiro(boolean novoTabuleiro) {
         
         System.out.println("\n--- Tabuleiro Visual ---");
-        for (int i = 0; i< casas.size(); i++){
+        for (int i = 0; i < casas.size(); i++){
             if ((i % 10 == 0) && i != 0) {
                 System.out.print("\n");
             }
-            System.out.print("["+ i +"]\t");
+            if(jogadores.get(i).getPosicao() == casas.get(i).getIndiceCasa()) {
+                System.out.println(i + ".[ " + jogadores.get(i).getCor() + " ]");
+            }
+            System.out.print( i + ".[ "+ " " +" ]\t");
         }
         System.out.print("\n");
-        
+        legendaJogadores();
     }
 
     public void printTabuleiro() {
@@ -85,7 +88,7 @@ public class Tabuleiro {
             for (int j = 0; j < colunas; j++) {
                 int numeroCasa = i * colunas + j;
                 if (numeroCasa >= totalCasas){
-                break;
+                    break;
                 }
             System.out.print(numeroCasa + ".[" + tabuleiroVisual[i][j].size() + "]\t");
             }
@@ -238,7 +241,9 @@ public class Tabuleiro {
             }
         }
     }
+    public void config(int numJogadores) {
 
+    }
 
     private void vencer(Jogador jogador, List<Jogador> jogadores) {
         System.out.println("=============================================");
