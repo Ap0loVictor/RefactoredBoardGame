@@ -1,15 +1,16 @@
 package tabuleiro;
 
 import casas.*;
+import factory.CasasFactory;
 import jogadores.Jogador;
 import java.util.*;
 import app.GerenciadorJogadores;
 
 public class Tabuleiro {
     private GerenciadorJogadores gerenciadorJogadores;
-    private ArrayList[] casas;
+    private ArrayList<Casa> casas;
     private Random random;
-    private List<Jogador>[][] tabuleiroVisual;
+    private ArrayLis;
     private Scanner scanner = new Scanner(System.in);
 
     private int totalCasas;
@@ -26,12 +27,7 @@ public class Tabuleiro {
         if (totalCasas % 10 != 0) {
             this.linhas++;
         }
-
-        this.casas = new ArrayList[totalCasas];
-        for (int i = 0; i < totalCasas; i++) {
-            this.casas[i] = new ArrayList<>();
-        }
-
+        this.casas = new ArrayList<>();
         this.tabuleiroVisual = new List[linhas][colunas];
         for (int i = 0; i < linhas; i++) {
             for (int j = 0; j < colunas; j++) {
@@ -88,8 +84,6 @@ public class Tabuleiro {
         }
         System.out.println("=================================\n");
     }
-
-    
 
     // os métodos abaixo provavelmnete vão desaparecer com a utilização do facade e refatoração geral de classes. 
     // por enquanto estarão aí pro funcionamento prévio do código
@@ -177,6 +171,53 @@ public class Tabuleiro {
             } while (repetirJogada);
         }
     }
+    public int perguntarNumeroDeCasas() {
+        System.out.print("Digite o número de casas do tabuleiro: ");
+
+        while (!scanner.hasNextInt()) {
+            System.out.println("Entrada inválida. Digite um número inteiro:");
+            scanner.next(); // não libera entrada inválida
+        }
+
+        int casas = scanner.nextInt();
+        scanner.nextLine(); // limpa a quebra de linha
+
+        while (casas <= 0) {
+            System.out.print("Número deve ser maior que zero. Tente novamente: ");
+            while (!scanner.hasNextInt()) {
+                System.out.println("Entrada inválida. Digite um número inteiro:");
+                scanner.next();
+
+                casas = scanner.nextInt();
+                scanner.nextLine(); // limpa a quebra de linha
+            }
+        }
+        return casas;
+    }
+    public void configCasas(int totalCasas) {
+        int quantCasasEspeciais = lerInt("Digite quantas casas especiais você deseja adicionar");
+        if(quantCasasEspeciais == 0){
+            criarTabNormal(totalCasas);
+            return;
+        }
+        for (int i = 0; i < quantCasasEspeciais; i++) {
+            System.out.println("Digite a posição da " + i + 1 + "º casa especial que você deseja adicionar: ");
+            int posCasaEspecial = scanner.nextInt();
+            System.out.println("===============================================================================");
+            System.out.println("Escolha o tipo da Casa Especial que estará na posição " + posCasaEspecial + " :");
+            System.out.println("===============================================================================");
+            int tipoCasa = lerInt("1 -  Casa Mágica\n2 -  Casa da Sorte\n3 -  Casa Stop\n4 -  Casa Surpresa\n5 -  Casa Volta");
+            System.out.println("===============================================================================");
+            for (int j = 0; j < totalCasas; j++) {
+                tabuleiro.getCasas().add(posCasaEspecial, CasasFactory.criarCasa(tipoCasa, posCasaEspecial));
+            }
+        }
+    }
+    public void criarTabNormal(int totalCasas) {
+        for (int i = 0; i < totalCasas; i++) {
+            casas.add(i, CasasFactory.criarCasa(0,0));
+        }
+    }
 
     private void vencer(Jogador jogador, List<Jogador> jogadores) {
         System.out.println("=============================================");
@@ -189,25 +230,41 @@ public class Tabuleiro {
 
     public void casasEspeciais(Jogador jogador, List<Jogador> jogadores) {
         int pos = jogador.getPosicao();
-        if (pos == 10 || pos == 25 || pos == 38) {
-            new CasaStop(pos).aplicarEfeito(jogador, jogadores);
-        } else if (pos == 13) {
-            new CasaSurpresa(pos).aplicarEfeito(jogador, jogadores);
-        } else if (pos == 5 || pos == 15 || pos == 30) {
-            new CasaSorte(pos).aplicarEfeito(jogador, jogadores);
-        } else if (pos == 17 || pos == 27) {
-            new CasaVolta(pos).aplicarEfeito(jogador, jogadores);
-        } else if (pos == 20 || pos == 35) {
-            new CasaMagica(pos).aplicarEfeito(jogador, jogadores);
+        for(int i = 0; i < totalCasas; i++) {
+            if(pos == casas.get(i).getIndiceCasa()) {
+                casas.get(pos).aplicarEfeito(jogador, jogadores);
+            }
         }
     }
-
-    public ArrayList[] getCasas() {
-        return casas;
+    /** Lê um inteiro genérico */
+    public int lerInt(String prompt) {
+        System.out.print(prompt);
+        while (!scanner.hasNextInt()) {
+            System.out.print("Entrada inválida. " + prompt);
+            scanner.nextLine();
+        }
+        int val = scanner.nextInt();
+        scanner.nextLine();
+        return val;
     }
 
-    public void setCasas(ArrayList[] casas) {
+    /** Lê um inteiro dentro de um intervalo [min..max] */
+    public int lerInt(String prompt, int min, int max) {
+        int val;
+        do {
+            val = lerInt(prompt);
+            if (val < min || val > max) {
+                System.out.printf("Valor deve estar entre %d e %d.%n", min, max);
+            }
+        } while (val < min || val > max);
+        return val;
+    }
+    public void setCasas(ArrayList<Casa> casas) {
         this.casas = casas;
+    }
+
+    public ArrayList<Casa> getCasas() {
+        return casas;
     }
 
     public Random getRandom() {

@@ -2,9 +2,14 @@
 package app;
 
 import jogar.*;
+import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
-        // basta instanciar e chamar o método da sua fachada
-        new Jogo().start();
+        Scanner scanner = new Scanner(System.in);
+        Jogo jogo = new Jogo();
+        jogo.printMenuInicial();
+        int numCasas = scanner.nextInt();
+        jogo.configTabuleiro(numCasas);
+        jogo.start();
     }
 }

@@ -1,5 +1,6 @@
 package jogar;
 
+import factory.CasasFactory;
 import factory.JogadorFactory;
 import jogadores.*;
 import tabuleiro.*;
@@ -17,11 +18,24 @@ public class Jogo {
 
     public Jogo() {
         this.scanner = new Scanner(System.in);
-        InstanciarTabuleiro instanciar = new InstanciarTabuleiro();
-        this.tabuleiro = instanciar.configurarTabuleiro();
+        this.tabuleiro = configTabuleiro();
         this.coresDisponiveis = new ArrayList<>(
             Arrays.asList("Vermelho", "Verde", "Azul", "Amarelo", "Preto", "Branco")
         );
+    }
+
+    public void printMenuInicial() {
+        System.out.println("=============================================");
+        System.out.println("              CORRIDA MALUCA!                 ");
+        System.out.println("=============================================\n\n");
+        System.out.println("Digite o número de casas que preferir para iniciar a corrida : ");
+    }
+
+    public Tabuleiro configTabuleiro(int numCasas) {
+        int totalCasas = tabuleiro.perguntarNumeroDeCasas();
+        Tabuleiro tab = new Tabuleiro(totalCasas);
+        tabuleiro.configCasas(totalCasas);
+        return new Tabuleiro(totalCasas);
     }
 
     /** Inicia todo o fluxo do jogo */
@@ -111,8 +125,9 @@ public class Jogo {
         }
     }
 
+
     /** Lê um inteiro genérico */
-    private int lerInt(String prompt) {
+    public int lerInt(String prompt) {
         System.out.print(prompt);
         while (!scanner.hasNextInt()) {
             System.out.print("Entrada inválida. " + prompt);
@@ -124,7 +139,7 @@ public class Jogo {
     }
 
     /** Lê um inteiro dentro de um intervalo [min..max] */
-    private int lerInt(String prompt, int min, int max) {
+    public int lerInt(String prompt, int min, int max) {
         int val;
         do {
             val = lerInt(prompt);
