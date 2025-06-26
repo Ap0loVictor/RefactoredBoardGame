@@ -8,27 +8,24 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
-
 public class Jogo {
     private final Scanner scanner;
     private final Tabuleiro tabuleiro;
     private final List<String> coresDisponiveis;
     private boolean podeAdicionar = true;
-
+    private GerenciadorJogadores gerenciadorJogadores = new GerenciadorJogadores();
+    private InstanciarTabuleiro instanciar = new InstanciarTabuleiro();
     public Jogo() {
         this.scanner = new Scanner(System.in);
-        InstanciarTabuleiro instanciar = new InstanciarTabuleiro();
         this.tabuleiro = instanciar.configurarTabuleiro();
         this.coresDisponiveis = new ArrayList<>(
-            Arrays.asList("Vermelho", "Verde", "Azul", "Amarelo", "Preto", "Branco")
+                Arrays.asList("Vermelho", "Verde", "Azul", "Amarelo", "Preto", "Branco")
         );
     }
-
     public void start() {               // Primeiro menu (Add jogador; Jogar; sair)
         int opcao;
         menuLoop: do {
             printMenu();
-
             opcao = lerInt("Escolha uma opção: ");
             switch (opcao) 
             {
@@ -54,6 +51,7 @@ public class Jogo {
 
         scanner.close();
     }
+{
 
     private void printMenu() {
         System.out.println("\n=============================================");
@@ -108,14 +106,13 @@ public class Jogo {
             tabuleiro.atualizarTabuleiroVisual();
             tabuleiro.imprimirTabuleiroVisual();
 
-            Jogador vencedor = tabuleiro.verificarVencedor();
+            Jogador vencedor = gerenciadorJogadores.verificarVencedor(instanciar.perguntarNumeroDeCasas());
             if (vencedor != null) {
                 System.out.println("\nO jogador " + vencedor.getCor() + " venceu! Fim da partida.");
                 break;
             }
         }
     }
-
     private int lerInt(String prompt) {     // É o ler inteiro normal
         System.out.print(prompt);
         while (!scanner.hasNextInt()) {
@@ -126,7 +123,6 @@ public class Jogo {
         scanner.nextLine();
         return val;
     }
-
     private int lerInt(String prompt, int min, int max) {  // Usado pra ler a cor na linha do idxCor
         int val;
         do {

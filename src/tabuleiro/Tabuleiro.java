@@ -3,11 +3,11 @@ package tabuleiro;
 import casas.*;
 import jogadores.Jogador;
 import java.util.*;
-import app.GerenciadorJogadores;
+import jogadores.GerenciadorJogadores;
 
 public class Tabuleiro {
     private GerenciadorJogadores gerenciadorJogadores;
-    private ArrayList[] casas;
+    private ArrayList<Casa> casas;
     private Random random;
     private List<Jogador>[][] tabuleiroVisual;
     private Scanner scanner = new Scanner(System.in);
@@ -20,16 +20,11 @@ public class Tabuleiro {
         this.random = new Random();
         this.gerenciadorJogadores = new GerenciadorJogadores();
         this.totalCasas = totalCasas;
-
         this.colunas = 10;
         this.linhas = totalCasas / 10;
+        this.casas = new ArrayList<>();
         if (totalCasas % 10 != 0) {
             this.linhas++;
-        }
-
-        this.casas = new ArrayList[totalCasas];
-        for (int i = 0; i < totalCasas; i++) {
-            this.casas[i] = new ArrayList<>();
         }
 
         this.tabuleiroVisual = new List[linhas][colunas];
@@ -102,29 +97,17 @@ public class Tabuleiro {
     public boolean inicarJogo() {
         return gerenciadorJogadores.validarTiposDeJogadores();
     }
-
-    public Jogador verificarVencedor() {
-        return gerenciadorJogadores.verificarVencedor(totalCasas);
-    }
-
     public void jogarRodada(boolean modoDebug) {
         List<Jogador> jogadores = gerenciadorJogadores.getJogadores();
-
-        if (jogadores.isEmpty()) {
-            System.out.println("Adicione jogadores para poder jogar uma nova partida");
+        if (verificaVazio(jogadores)){
             return;
         }
-
         for (Jogador jogador : jogadores) {
-            if (jogador.isPularRodada()) {
-                jogador.setPularRodada(false);
-                System.out.println("O jogador " + jogador.getCor() + " está pulando a rodada");
+            if(pularRodada(jogadores)) {
                 continue;
             }
-
             jogador.setJogadas(jogador.getJogadas() + 1);
             boolean repetirJogada;
-
             do {
                 int[] dados = null;
                 int soma = 0;
@@ -146,7 +129,7 @@ public class Tabuleiro {
                     }
                     jogador.avancar(opc);
 
-                    if (jogador.getPosicao() >= totalCasas) {
+                    if (gerenciadorJogadores.verificarVencedor(totalCasas) != null) {
                         vencer(jogador, jogadores);
                         return;
                     }
@@ -162,7 +145,7 @@ public class Tabuleiro {
                     System.out.println("Dados rolados: " + dados[0] + " + " + dados[1] + " = " + soma);
                     jogador.avancar(soma);
 
-                    if (jogador.getPosicao() >= totalCasas) {
+                    if (gerenciadorJogadores.verificarVencedor(totalCasas) != null) {
                         vencer(jogador, jogadores);
                         return;
                     }
@@ -200,12 +183,28 @@ public class Tabuleiro {
             new CasaMagica(pos).aplicarEfeito(jogador, jogadores);
         }
     }
+    public boolean verificaVazio(List<Jogador> jogadores) {
+        if (jogadores.isEmpty()) {
+            System.out.println("Adicione jogadores para poder jogar uma nova partida");
+            return true;
+        }
+        return false;
+    }
+    public boolean pularRodada(List<Jogador> jogadores){
+        for(Jogador jogador : jogadores) {
+            if (jogador.isPularRodada()){
+                System.out.println("O jogador " + jogador.getCor() + " está pulando a rodada!");
+                return true;
+            }
+        }
+        return false;
+    }
 
-    public ArrayList[] getCasas() {
+    public ArrayList<Casa> getCasas() {
         return casas;
     }
 
-    public void setCasas(ArrayList[] casas) {
+    public void setCasas(ArrayList<Casa> casas) {
         this.casas = casas;
     }
 
