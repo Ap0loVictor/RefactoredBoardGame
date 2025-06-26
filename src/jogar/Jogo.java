@@ -22,52 +22,42 @@ public class Jogo {
                 Arrays.asList("Vermelho", "Verde", "Azul", "Amarelo", "Preto", "Branco")
         );
     }
-
-    /** Inicia todo o fluxo do jogo */
-    public void start() {
-        int opc;
-        do {
-            Jogador vencedor = gerenciadorJogadores.verificarVencedor(instanciar.perguntarNumeroDeCasas());
-            printMenu(vencedor == null);
-
-            opc = lerInt("Escolha uma opção: ");
-            switch (opc) {
+    public void start() {               // Primeiro menu (Add jogador; Jogar; sair)
+        int opcao;
+        menuLoop: do {
+            printMenu();
+            opcao = lerInt("Escolha uma opção: ");
+            switch (opcao) 
+            {
                 case 1:
                     if (tabuleiro.getJogadores().size() < 6 && podeAdicionar) {
                         fluxoAdicionarJogador();
-                    } else {
+                    } 
+                    else {
                         System.out.println("Não é possível adicionar mais jogadores.");
                     }
                     break;
                 case 2:
-                    if (vencedor == null) {
-                        podeAdicionar = false;
-                        fluxoJogar();
-                    } else {
-                        System.out.println("Já há um vencedor! Reinicie para começar nova partida.");
-                    }
-                    break;
+                    podeAdicionar = false;
+                    apresentarSegundoMenu();
+                    break menuLoop;
                 case 3:
                     System.out.println("Saindo...");
                     break;
                 default:
-                    System.out.println("Opção inválida.");
+                        System.out.println("Opção inválida.");
             }
-        } while (opc != 3);
+        } while (opcao != 3);
 
         scanner.close();
     }
-    public Tabuleiro configTabuleiro(int numCasas) {
-        return tabuleiro;
-    }
-    private void printMenu(boolean semVencedor) {
+{
+
+    private void printMenu() {
         System.out.println("\n=============================================");
         if (tabuleiro.getJogadores().size() < 6 && podeAdicionar) {
-            System.out.println("   1- Adicionar Jogador");
-        }
-        if (semVencedor) {
-            System.out.println("   2- Jogar");
-        }
+            System.out.println("   1- Adicionar Jogador");}
+        System.out.println("   2- Jogar");
         System.out.println("   3- Sair");
         System.out.println("=============================================");
     }
@@ -75,32 +65,44 @@ public class Jogo {
     private void fluxoAdicionarJogador() {
         System.out.println("\n--- Cadastro de Jogador ---");
         System.out.println("1- Azarado   2- Sortudo   3- Normal");
-        int tipo = lerInt("Escolha o tipo: ");
+        int tipo = lerInt("Escolha o tipo: ", 1, 3);
 
         System.out.println("\n--- Escolha a cor ---");
         for (int i = 0; i < coresDisponiveis.size(); i++) {
             System.out.printf(" %d- %s%n", i + 1, coresDisponiveis.get(i));
         }
         int idxCor = lerInt("Escolha uma cor: ", 1, coresDisponiveis.size()) - 1;
-        String cor = coresDisponiveis.remove(idxCor);
+        String nomeCor = coresDisponiveis.remove(idxCor);
+        Cor cor = new Cor(nomeCor);
         Jogador j = JogadorFactory.criarJogador(tipo, cor);
         tabuleiro.adicionarJogador(j);
         System.out.println("Jogador " + j.getCor() + " adicionado.");
     }
 
-    private void fluxoJogar() {
+    private void apresentarSegundoMenu() {              // Menu 2: Escolha do tipo de jogo
+        validarInicioDeJogo();
+        
         if (!tabuleiro.inicarJogo()) {
-            System.out.println("Não podem haver apenas jogadores do mesmo tipo. Abortando Jogo!");
+            System.out.println("Não foi atendida a condição: \n     - Ter ao menos 2 jogadores de tipos diferentes'\nAbortando Jogo...");
+            podeAdicionar = true;
+            start();  // Avaliar se isso é um método plausível ou "faz mal"
             return;
         }
 
         System.out.println("\n--- Iniciando Jogo ---");
-        while (true) {
-            System.out.println("\n1- Inserir Casas   2- Rolar Dados");
-            int opc = lerInt("Escolha uma opção: ");
-            boolean inserirCasas = (opc == 1);
-            tabuleiro.jogarRodada(inserirCasas);
+        System.out.println("\nEscolha o modo de jogo: \n1- Inserir Casas   2- Rolar Dados");
+        int opc = lerInt("Modo de jogo: ", 1, 2);
+        boolean inserirCasas = (opc == 1);
+        jogarNoModoDeJogo(inserirCasas);
+    }
 
+    private void validarInicioDeJogo(){
+
+    }
+
+    private void jogarNoModoDeJogo(boolean inserirCasas){
+        while (true) {
+            tabuleiro.jogarRodada(inserirCasas);
             tabuleiro.atualizarTabuleiroVisual();
             tabuleiro.imprimirTabuleiroVisual();
 
@@ -111,21 +113,17 @@ public class Jogo {
             }
         }
     }
-
-    /** Lê um inteiro genérico */
-    public int lerInt(String prompt) {
+    private int lerInt(String prompt) {     // É o ler inteiro normal
         System.out.print(prompt);
         while (!scanner.hasNextInt()) {
-            System.out.print("Entrada inválida. " + prompt);
+            System.out.print("Entrada inválida.\n" + prompt);
             scanner.nextLine();
         }
         int val = scanner.nextInt();
         scanner.nextLine();
         return val;
     }
-
-    /** Lê um inteiro dentro de um intervalo [min..max] */
-    public int lerInt(String prompt, int min, int max) {
+    private int lerInt(String prompt, int min, int max) {  // Usado pra ler a cor na linha do idxCor
         int val;
         do {
             val = lerInt(prompt);
