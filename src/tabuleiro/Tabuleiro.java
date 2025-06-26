@@ -8,9 +8,11 @@ import app.GerenciadorJogadores;
 
 public class Tabuleiro {
     private GerenciadorJogadores gerenciadorJogadores;
-    private ArrayList<Casa> casas;
     private Random random;
-    private ArrayLis;
+    private ArrayList<Casa> casas;
+    private ArrayList<Jogador> jogadores;
+    private List<Jogador>[][] tabuleiroVisual;
+    private boolean novoTabuleiro = true;
     private Scanner scanner = new Scanner(System.in);
 
     private int totalCasas;
@@ -35,7 +37,18 @@ public class Tabuleiro {
             }
         }
     }
-
+    public Tabuleiro(int totalCasas, boolean novoTabuleiro) {
+        this.random = new Random();
+        this.gerenciadorJogadores = new GerenciadorJogadores();
+        this.totalCasas = totalCasas;
+        this.casas = new ArrayList<>();
+        criarTabNormal(totalCasas);
+    }
+    public void criarTabNormal(int totalCasas) {
+        for (int i = 0; i < totalCasas; i++) {
+            casas.add(i, CasasFactory.criarCasa(0,0));
+        }
+    }
     public void atualizarTabuleiroVisual() {
         for (int i = 0; i < linhas; i++) {
             for (int j = 0; j < colunas; j++) {
@@ -54,7 +67,7 @@ public class Tabuleiro {
         }
     }
 
-    public void imprimirTabuleiroVisual() {
+    public void printTabuleiro() {
         System.out.println("\n============= Tabuleiro Visual =============");
         for (int i = 0; i < linhas; i++) {
             for (int j = 0; j < colunas; j++) {
@@ -76,7 +89,9 @@ public class Tabuleiro {
         System.out.println("=================================");
         legendaJogadores();
     }
-    
+    public void printTabuleiro(boolean novoPrint) {
+        System.out.println();
+    }
     public void legendaJogadores(){
     System.out.println("\nLegenda dos Jogadores:");
         for (Jogador jogador : gerenciadorJogadores.getJogadores()) {
@@ -213,11 +228,7 @@ public class Tabuleiro {
             }
         }
     }
-    public void criarTabNormal(int totalCasas) {
-        for (int i = 0; i < totalCasas; i++) {
-            casas.add(i, CasasFactory.criarCasa(0,0));
-        }
-    }
+
 
     private void vencer(Jogador jogador, List<Jogador> jogadores) {
         System.out.println("=============================================");
