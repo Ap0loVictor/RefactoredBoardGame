@@ -66,9 +66,21 @@ public class Tabuleiro {
             }
         }
     }
+    public void printTabuleiro(boolean novoTabuleiro) {
+        
+        System.out.println("\n--- Tabuleiro Visual ---");
+        for (int i = 0; i< casas.size(); i++){
+            if ((i % 10 == 0) && i != 0) {
+                System.out.print("\n");
+            }
+            System.out.print("["+ i +"]\t");
+        }
+        System.out.print("\n");
+        
+    }
 
     public void printTabuleiro() {
-        System.out.println("\n============= Tabuleiro Visual =============");
+        System.out.println("\n--- Tabuleiro Visual ---");
         for (int i = 0; i < linhas; i++) {
             for (int j = 0; j < colunas; j++) {
                 int numeroCasa = i * colunas + j;
@@ -89,9 +101,7 @@ public class Tabuleiro {
         System.out.println("=================================");
         legendaJogadores();
     }
-    public void printTabuleiro(boolean novoPrint) {
-        System.out.println();
-    }
+
     public void legendaJogadores(){
     System.out.println("\nLegenda dos Jogadores:");
         for (Jogador jogador : gerenciadorJogadores.getJogadores()) {
@@ -224,7 +234,7 @@ public class Tabuleiro {
             int tipoCasa = lerInt("1 -  Casa Mágica\n2 -  Casa da Sorte\n3 -  Casa Stop\n4 -  Casa Surpresa\n5 -  Casa Volta");
             System.out.println("===============================================================================");
             for (int j = 0; j < totalCasas; j++) {
-                tabuleiro.getCasas().add(posCasaEspecial, CasasFactory.criarCasa(tipoCasa, posCasaEspecial));
+                // tabuleiro.getCasas().add(posCasaEspecial, CasasFactory.criarCasa(tipoCasa, posCasaEspecial));
             }
         }
     }
