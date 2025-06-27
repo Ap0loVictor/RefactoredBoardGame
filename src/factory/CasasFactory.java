@@ -14,6 +14,10 @@ public class CasasFactory {
                 return new CasaSurpresa(pos);
             case 5:
                 return new CasaVolta(pos);
+            case 6:
+                return new CasaAzar(pos);
+            case 7:
+                return new CasaJogaNovamente(pos);
             default:
                 return new CasaNormal(pos);
         }

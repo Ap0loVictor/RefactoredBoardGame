@@ -10,7 +10,5 @@ public class CasaNormal extends Casa {
     }
 
     @Override
-    public void aplicarEfeito(Jogador JogadorAtual, List<Jogador> jogadores) {
-
-    }
+    public void aplicarEfeito(Jogador jogadorAtual, List<Jogador> jogadores) {}
 }

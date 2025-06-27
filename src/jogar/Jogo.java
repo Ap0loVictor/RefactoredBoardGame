@@ -1,7 +1,5 @@
 package jogar;
 
-import app.GerenciadorJogadores;
-import factory.CasasFactory;
 import factory.JogadorFactory;
 import jogadores.*;
 import tabuleiro.*;
@@ -10,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
-import tabuleiro.*;
+
 public class Jogo {
     private final Scanner scanner;
     private final Tabuleiro tabuleiro;
@@ -19,7 +17,7 @@ public class Jogo {
 
     public Jogo() {
         this.scanner = new Scanner(System.in);
-        this.tabuleiro = new Tabuleiro(0, true);
+        this.tabuleiro = new Tabuleiro(0);
         this.coresDisponiveis = new ArrayList<>(
             Arrays.asList("Vermelho", "Verde", "Azul", "Amarelo", "Preto", "Branco"));
     }
@@ -29,24 +27,18 @@ public class Jogo {
         System.out.println("Digite o número de casas que preferir para iniciar a corrida : ");
     }
     public void printMenuJogadores() {
-        System.out.println("Digite o numero de jogadores : ");
+        System.out.println("Digite o numero de jogadores na partida : ");
     }
-    public Tabuleiro configTabuleiro(int numCasas) {
-        Tabuleiro tab = new Tabuleiro(numCasas);
+    public void configTabuleiro(int numCasas) {
         tabuleiro.configCasas(numCasas);
-        return new Tabuleiro(numCasas);
     }
 
     /** Inicia todo o fluxo do jogo */
     public void start() {
         int opc;
         do {
-            System.out.println(tabuleiro.getCasas().size());
             Jogador vencedor = verificarVencedor(tabuleiro.getCasas().size());
-            System.out.println(vencedor);
             printMenu(vencedor == null);
-            System.out.println(vencedor);
-
             opc = lerInt("Escolha uma opção: ");
             switch (opc) {
                 case 1:
@@ -135,11 +127,11 @@ public class Jogo {
             tabuleiro.jogarRodada(inserirCasas);
 
             tabuleiro.atualizarTabuleiroVisual();
-           // tabuleiro.imprimirTabuleiroVisual();
-
+            printTabuleiro();
             Jogador vencedor = verificarVencedor(tabuleiro.getCasas().size());
             if (vencedor != null) {
                 System.out.println("\nO jogador " + vencedor.getCor() + " venceu! Fim da partida.");
+                printTabuleiro();
                 break;
             }
         }

@@ -30,7 +30,3 @@ public class CasaMagica extends Casa {
         }
       }
 }
-    // 20 e 35:
-    // Casas mágicas: se o competidor parar em uma delas, ele troca de lugar com o
-    // jogador que está mais atrás no jogo.
-    // Caso ele seja o último, ele não sai do lugar.

@@ -13,5 +13,4 @@ public class CasaStop extends Casa {
         System.out.println("O jogador" + jogador.getCor() + " caiu na casa " + indiceCasa + " e vai pular a próxima rodada");
     }
 }
-    // 10, 25, 38:
-    // Se o competidor parar em uma dessas casa, ele não joga a próxima rodada;
+
