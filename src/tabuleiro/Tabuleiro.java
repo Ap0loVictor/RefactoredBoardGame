@@ -223,11 +223,7 @@ public class Tabuleiro {
             return;
         }
         for (int i = 0; i < quantCasasEspeciais; i++) {
-            int posCasaEspecial = lerInt(
-                    "Digite a posição (0 a " + (totalCasas -1) + ") da " + (i + 1) + "º casa especial que você deseja adicionar: ",
-                    0,
-                    totalCasas -1
-            );
+            int posCasaEspecial = adicionarPosCasaEspecial("Digite a posição (0 a " + (totalCasas -1) + ") da " + (i + 1) + "º casa especial que você deseja adicionar: ");
             System.out.println("===============================================================================");
             System.out.println("Escolha o tipo da Casa Especial que estará na posição " + posCasaEspecial + " :");
             System.out.println("===============================================================================");
@@ -236,8 +232,20 @@ public class Tabuleiro {
             casas.set(posCasaEspecial, CasasFactory.criarCasa(tipoCasa, posCasaEspecial));
         }
     }
-
-
+    public int adicionarPosCasaEspecial(String prompt) {
+        int posicao;
+        do {
+            posicao = lerInt(prompt, 0, totalCasas - 1);
+            if(existeCasa(posicao)){
+                System.out.println("Já existe uma casa especial na posição " + posicao + "\nTente Novamente!");
+            }
+        } while (existeCasa(posicao));
+        return posicao;
+    }
+    public boolean existeCasa(int posCasaEspecial) {
+        Casa casa = casas.get(posCasaEspecial);
+        return !(casa instanceof CasaNormal);
+    }
     private void vencer(Jogador jogador, List<Jogador> jogadores) {
         System.out.println("=============================================");
         System.out.println("O jogador " + jogador.getCor() + " venceu!");
