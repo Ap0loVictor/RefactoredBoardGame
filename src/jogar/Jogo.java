@@ -41,8 +41,11 @@ public class Jogo {
     public void start() {
         int opc;
         do {
-            Jogador vencedor = tabuleiro.verificarVencedor();
+            System.out.println(tabuleiro.getCasas().size());
+            Jogador vencedor = verificarVencedor(tabuleiro.getCasas().size());
+            System.out.println(vencedor);
             printMenu(vencedor == null);
+            System.out.println(vencedor);
 
             opc = lerInt("Escolha uma opção: ");
             switch (opc) {
@@ -71,6 +74,20 @@ public class Jogo {
 
         scanner.close();
     }
+
+    public Jogador verificarVencedor(int numCasas) {
+    for (Jogador jogador : tabuleiro.getJogadores()) {
+        if (jogador.getPosicao() >= numCasas - 1) {
+            return jogador;
+        }
+    }
+    return null;
+    }
+
+    public void printTabuleiro(){
+        tabuleiro.printTabuleiro();
+    }
+
     public void config(int numJogadores) {
         for(int i = 0; i < numJogadores; i++) {
             fluxoAdicionarJogador();
@@ -120,7 +137,7 @@ public class Jogo {
             tabuleiro.atualizarTabuleiroVisual();
            // tabuleiro.imprimirTabuleiroVisual();
 
-            Jogador vencedor = tabuleiro.verificarVencedor();
+            Jogador vencedor = verificarVencedor(tabuleiro.getCasas().size());
             if (vencedor != null) {
                 System.out.println("\nO jogador " + vencedor.getCor() + " venceu! Fim da partida.");
                 break;

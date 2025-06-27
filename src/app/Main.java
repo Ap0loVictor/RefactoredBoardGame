@@ -10,6 +10,7 @@ public class Main {
         jogo.printMenuCasas();
         int numCasas = scanner.nextInt();
         jogo.configTabuleiro(numCasas);
+        jogo.printTabuleiro();
         jogo.printMenuJogadores();
         int numJogadores = scanner.nextInt();
         jogo.config(numJogadores);

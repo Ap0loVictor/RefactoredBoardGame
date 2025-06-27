@@ -35,15 +35,7 @@ public class GerenciadorJogadores {
         return tipos.size() >= 2;
     }
 
-    public Jogador verificarVencedor(int numCasas) {
-    for (Jogador jogador : jogadores) {
-        if (jogador.getPosicao() >= numCasas - 1) {
-            return jogador;
-        }
-    }
-    return null;
-}
-
+    
     private void exibirVencedor(Jogador jogador, ArrayList<Jogador> jogadores){
         System.out.println("=============================================");
         System.out.println("O jogador " + jogador.getCor() + " venceu !");

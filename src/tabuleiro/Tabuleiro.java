@@ -46,7 +46,7 @@ public class Tabuleiro {
     }
     public void criarTabNormal(int totalCasas) {
         for (int i = 0; i < totalCasas; i++) {
-            casas.add(i, CasasFactory.criarCasa(0,0));
+            casas.add(i, CasasFactory.criarCasa(0,i));
         }
     }
     public void atualizarTabuleiroVisual() {
@@ -124,10 +124,6 @@ public class Tabuleiro {
 
     public boolean inicarJogo() {
         return gerenciadorJogadores.validarTiposDeJogadores();
-    }
-
-    public Jogador verificarVencedor() {
-        return gerenciadorJogadores.verificarVencedor(totalCasas);
     }
 
     public void jogarRodada(boolean modoDebug) {
