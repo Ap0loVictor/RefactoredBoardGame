@@ -132,7 +132,7 @@ public class Jogo {
             printTabuleiro();
             Jogador vencedor = verificarVencedor(tabuleiro.getCasas().size());
             if (vencedor != null) {
-                System.out.println("\nO jogador " + vencedor.getCor() + " venceu! Fim da partida.");
+                System.out.println("  ---- Fim de jogo ----\nO jogador " + vencedor.getCor() + " venceu!");
                 printTabuleiro();
                 break;
             }

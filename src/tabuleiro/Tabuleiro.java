@@ -90,7 +90,6 @@ public class Tabuleiro {
         for (Jogador jogador : gerenciadorJogadores.getJogadores()) {
             System.out.println(jogador.getClass().getSimpleName() + " | " + jogador.getCor() + " | Posição " + jogador.getPosicao());
         }
-        System.out.println("=================================\n");
     }
 
     public boolean adicionarJogador(Jogador jogador) {
