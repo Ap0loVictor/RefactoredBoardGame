@@ -23,11 +23,11 @@ public class Jogo {
     }
 
     public void printMenuCasas() {
-        System.out.println(" -------- CORRIDA MALUCA! ------\n\n");
-        System.out.println("Digite o número de casas que preferir para iniciar a corrida : ");
+        System.out.println("\n -------- CORRIDA MALUCA! ------\n");
+        System.out.print("Digite o número de casas que preferir para iniciar a corrida : ");
     }
     public void printMenuJogadores() {
-        System.out.println("Digite o numero de jogadores na partida : ");
+        System.out.print("Digite o numero de jogadores na partida : ");
     }
     public void configTabuleiro(int numCasas) {
         tabuleiro.configCasas(numCasas);

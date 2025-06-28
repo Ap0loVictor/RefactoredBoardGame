@@ -11,7 +11,6 @@ public class Main {
         jogo.printMenuCasas();
         int numCasas = scanner.nextInt();
         jogo.configTabuleiro(numCasas);
-        jogo.printMenuJogadores();
         int numJogadores = gJ.lerQuantidadeJogadores();
         jogo.config(numJogadores);
         jogo.printTabuleiro();
