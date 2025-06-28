@@ -3,7 +3,7 @@ package jogadores;
 import java.util.Random;
 
 public class JogadorNormal extends Jogador {
-    public JogadorNormal(String cor){
+    public JogadorNormal(Cor cor){
         super(cor);
     }
     @Override

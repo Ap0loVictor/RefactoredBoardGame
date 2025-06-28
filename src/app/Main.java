@@ -1,6 +1,6 @@
 // src/app/Main.java
 package app;
-
+import jogadores.*;
 import jogar.*;
 import java.util.Scanner;
 public class Main {

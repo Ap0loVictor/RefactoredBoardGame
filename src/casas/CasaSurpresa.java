@@ -17,7 +17,7 @@ public class CasaSurpresa extends Casa {
 
         int indice = jogadores.indexOf(jogador);
         int sorteio = random.nextInt(3) + 1;
-        String cor = jogador.getCor();
+        Cor cor = jogador.getCor();
         int posicao = jogador.getPosicao();
         Jogador novoJogador = null;
         switch (sorteio) {

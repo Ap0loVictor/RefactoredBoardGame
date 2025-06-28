@@ -1,12 +1,10 @@
-package app;
+package jogadores;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
-
-import jogadores.Jogador;
 
 
 public class GerenciadorJogadores {

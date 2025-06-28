@@ -4,7 +4,7 @@ import casas.*;
 import factory.CasasFactory;
 import jogadores.Jogador;
 import java.util.*;
-import app.GerenciadorJogadores;
+import jogadores.GerenciadorJogadores;
 
 public class Tabuleiro {
     private GerenciadorJogadores gerenciadorJogadores;

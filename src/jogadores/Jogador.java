@@ -2,12 +2,12 @@ package jogadores;
 
 import java.util.Random;
 public abstract class Jogador {
-    protected String cor;
+    protected Cor cor;
     protected int posicao;
     protected boolean pularRodada;
     protected boolean jogarNovamente;
     protected int jogadas;
-    protected Jogador(String cor){
+    protected Jogador(Cor cor){
         this.cor = cor;
         this.posicao = 0;
         this.pularRodada = false;
@@ -34,10 +34,10 @@ public abstract class Jogador {
     public boolean isPularRodada() {
         return pularRodada;
     } 
-    public String getCor() {
+    public Cor getCor() {
         return cor;
     }
-    public void setCor(String cor) {
+    public void setCor(Cor cor) {
         this.cor = cor;
     }
     public int getPosicao() {

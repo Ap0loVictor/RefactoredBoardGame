@@ -106,9 +106,11 @@ public class Jogo {
         for (int i = 0; i < coresDisponiveis.size(); i++) {
             System.out.printf(" %d- %s%n", i + 1, coresDisponiveis.get(i));
         }
+        String cor;
         int idxCor = lerInt("Escolha uma cor: ", 1, coresDisponiveis.size()) - 1;
-        String cor = coresDisponiveis.remove(idxCor);
-        Jogador j = JogadorFactory.criarJogador(tipo, cor);
+        cor = coresDisponiveis.remove(idxCor);
+        Cor corJogador = new Cor(cor);
+        Jogador j = JogadorFactory.criarJogador(tipo, corJogador);
         tabuleiro.adicionarJogador(j);
         System.out.println("Jogador " + j.getCor() + " adicionado.");
     }
@@ -160,5 +162,8 @@ public class Jogo {
             }
         } while (val < min || val > max);
         return val;
+    }
+    public List<String> getCoresDisponiveis() {
+        return coresDisponiveis;
     }
 }
