@@ -217,25 +217,22 @@ public class Tabuleiro {
         this.totalCasas = totalCasas;
         criarTabNormal(totalCasas);
         inicializarTabuleiroVisual();
-        int quantCasasEspeciais = lerInt("Digite quantas casas especiais você deseja adicionar");
+        int quantCasasEspeciais = lerInt("\nDigite quantas casas especiais você deseja adicionar: ", 0, totalCasas-1);
         if(quantCasasEspeciais == 0){
             criarTabNormal(totalCasas);
             return;
         }
         for (int i = 0; i < quantCasasEspeciais; i++) {
-            int posCasaEspecial = adicionarPosCasaEspecial("Digite a posição (0 a " + (totalCasas -1) + ") da " + (i + 1) + "º casa especial que você deseja adicionar: ");
-            System.out.println("===============================================================================");
-            System.out.println("Escolha o tipo da Casa Especial que estará na posição " + posCasaEspecial + " :");
-            System.out.println("===============================================================================");
-            int tipoCasa = lerInt("1 -  Casa Mágica\n2 -  Casa da Sorte\n3 -  Casa Stop\n4 -  Casa Surpresa\n5 -  Casa Volta\n6 -  Casa Azar\n7 -  Casa Jogar Novamente");
-            System.out.println("===============================================================================\n\n");
+            int posCasaEspecial = adicionarPosCasaEspecial("\nDigite a posição (1 a " + (totalCasas -1) + ") da " + (i + 1) + "º casa especial que você deseja adicionar: ");
+            System.out.println("\n    ----Escolha do tipo da Casa Especial que estará na posição " + posCasaEspecial + " ----\n");
+            int tipoCasa = lerInt("1 - Casa Mágica\n2 - Casa da Sorte\n3 - Casa Stop\n4 - Casa Surpresa\n5 - Casa Volta\n6 - Casa Azar\n7 - Casa Jogar Novamente\n\nTipo escolhido: ", 1, 7);
             casas.set(posCasaEspecial, CasasFactory.criarCasa(tipoCasa, posCasaEspecial));
         }
     }
     public int adicionarPosCasaEspecial(String prompt) {
         int posicao;
         do {
-            posicao = lerInt(prompt, 0, totalCasas - 1);
+            posicao = lerInt(prompt, 1, totalCasas - 1);
             if(existeCasa(posicao)){
                 System.out.println("Já existe uma casa especial na posição " + posicao + "\nTente Novamente!");
             }
@@ -261,7 +258,7 @@ public class Tabuleiro {
             casas.get(pos).aplicarEfeito(jogador, jogadores);
         }
     }
-    /** Lê um inteiro genérico */
+
     public int lerInt(String prompt) {
         System.out.print(prompt);
         while (!scanner.hasNextInt()) {
@@ -272,8 +269,6 @@ public class Tabuleiro {
         scanner.nextLine();
         return val;
     }
-
-    /** Lê um inteiro dentro de um intervalo [min..max] */
     public int lerInt(String prompt, int min, int max) {
         int val;
         do {
