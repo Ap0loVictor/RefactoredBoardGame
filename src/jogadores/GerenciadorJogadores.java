@@ -32,22 +32,6 @@ public class GerenciadorJogadores {
         }
         return tipos.size() >= 2;
     }
-    public int lerQuantidadeJogadores() {
-        int quantidade;
-        do {
-            System.out.print("Digite o número de jogadores (2 a 6): ");
-            while (!scanner.hasNextInt()) {
-                System.out.println("Entrada inválida. Digite um número inteiro entre 2 e 6.");
-                scanner.next();
-            }
-            quantidade = scanner.nextInt();
-            scanner.nextLine(); // limpar a quebra de linha
-            if (quantidade < 2 || quantidade > 6) {
-                System.out.println("Número inválido. Deve ser entre 2 e 6.");
-            }
-        } while (quantidade < 2 || quantidade > 6);
-        return quantidade;
-    }
 
     public List<Jogador> getJogadores() {
     return jogadores;

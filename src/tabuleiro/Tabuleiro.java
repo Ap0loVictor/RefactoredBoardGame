@@ -10,9 +10,8 @@ public class Tabuleiro {
     private GerenciadorJogadores gerenciadorJogadores;
     private Random random;
     private ArrayList<Casa> casas;
-    private ArrayList<Jogador> jogadores;
+    private ArrayList<Jogador> jogadores; // Essa merda não tá sendo usada
     private List<Jogador>[][] tabuleiroVisual;
-    private boolean novoTabuleiro = true;
     private Scanner scanner = new Scanner(System.in);
     private int totalCasas;
     private int linhas;
@@ -286,14 +285,6 @@ public class Tabuleiro {
         return casas;
     }
 
-    public Random getRandom() {
-        return random;
-    }
-
-    public void setRandom(Random random) {
-        this.random = random;
-    }
-
     public List<Jogador> getJogadores() {
         return gerenciadorJogadores.getJogadores();
     }
@@ -303,17 +294,5 @@ public class Tabuleiro {
         for (Jogador j : jogadores) {
             this.gerenciadorJogadores.adicionarJogador(j);
         }
-    }
-    public boolean isNovoTabuleiro() {
-        return novoTabuleiro;
-    }
-    public void setNovoTabuleiro(boolean novoTabuleiro) {
-        this.novoTabuleiro = novoTabuleiro;
-    }
-    public Scanner getScanner() {
-        return scanner;
-    }
-    public void setScanner(Scanner scanner) {
-        this.scanner = scanner;
     }
 }
