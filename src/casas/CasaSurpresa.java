@@ -46,7 +46,3 @@ public class CasaSurpresa extends Casa {
         }
     }
 }
-
-// 13:
-// Casas.Casa surpresa, o jogador deve tirar uma carta aleatória que o fará mudar de
-// tipo de jogador de acordo com a carta.

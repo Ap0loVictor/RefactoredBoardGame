@@ -1,18 +1,20 @@
 // src/app/Main.java
 package app;
-import java.util.Scanner;
+import jogadores.*;
 import jogar.*;
+import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        int numCasas;
-        int numJogadores;
+        GerenciadorJogadores gJ = new GerenciadorJogadores();
         Jogo jogo = new Jogo();
-         numCasas = jogo.lerInt("Digite o número de casas para o tabuleiro: ");
-         numJogadores = jogo.lerInt("Digite o número de jogadores: ");
-         jogo.configTabuleiro(numCasas);
-         jogo.start();
-
-
+        jogo.printMenuCasas();
+        int numCasas = scanner.nextInt();
+        jogo.configTabuleiro(numCasas);
+        jogo.printMenuJogadores();
+        int numJogadores = gJ.lerQuantidadeJogadores();
+        jogo.config(numJogadores);
+        jogo.printTabuleiro();
+        jogo.start();
     }
 }

@@ -8,7 +8,7 @@ public abstract class Casa
     protected Casa (int indiceCasa){
         this.indiceCasa = indiceCasa;
     }
-    public abstract void aplicarEfeito(Jogador JogadorAtual, List<Jogador> jogadores);
+    public abstract void aplicarEfeito(Jogador jogadorAtual, List<Jogador> jogadores);
     
     public int getIndiceCasa() {
         return indiceCasa;
@@ -17,4 +17,3 @@ public abstract class Casa
         this.indiceCasa = indiceCasa;
     }
 }
-// funciona

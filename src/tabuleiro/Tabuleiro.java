@@ -1,17 +1,19 @@
 package tabuleiro;
 
 import casas.*;
+import factory.CasasFactory;
 import jogadores.Jogador;
 import java.util.*;
 import jogadores.GerenciadorJogadores;
 
 public class Tabuleiro {
     private GerenciadorJogadores gerenciadorJogadores;
-    private ArrayList<Casa> casas;
     private Random random;
+    private ArrayList<Casa> casas;
+    private ArrayList<Jogador> jogadores;
     private List<Jogador>[][] tabuleiroVisual;
+    private boolean novoTabuleiro = true;
     private Scanner scanner = new Scanner(System.in);
-
     private int totalCasas;
     private int linhas;
     private int colunas;
@@ -20,21 +22,27 @@ public class Tabuleiro {
         this.random = new Random();
         this.gerenciadorJogadores = new GerenciadorJogadores();
         this.totalCasas = totalCasas;
+        this.casas = new ArrayList<>();
         this.colunas = 10;
         this.linhas = totalCasas / 10;
-        this.casas = new ArrayList<>();
         if (totalCasas % 10 != 0) {
             this.linhas++;
         }
-
         this.tabuleiroVisual = new List[linhas][colunas];
         for (int i = 0; i < linhas; i++) {
             for (int j = 0; j < colunas; j++) {
                 tabuleiroVisual[i][j] = new ArrayList<>();
             }
         }
+        inicializarTabuleiroVisual();
+        criarTabNormal(totalCasas);
     }
-
+    public void criarTabNormal(int totalCasas) {
+        casas = new ArrayList<>();
+        for (int i = 0; i < totalCasas; i++) {
+            casas.add(i, CasasFactory.criarCasa(0,i));
+        }
+    }
     public void atualizarTabuleiroVisual() {
         for (int i = 0; i < linhas; i++) {
             for (int j = 0; j < colunas; j++) {
@@ -42,40 +50,41 @@ public class Tabuleiro {
             }
         }
         for (Jogador jogador : gerenciadorJogadores.getJogadores()) {
-            if (jogador.getPosicao() >= totalCasas) {
-                jogador.setPosicao(totalCasas);
+            int pos = jogador.getPosicao();
+            if (pos >= totalCasas) {
+                pos = totalCasas - 1;
+                jogador.setPosicao(pos); // força ficar na última casa
             }
-            if (jogador.getPosicao() < totalCasas) {
-                int linha = jogador.getPosicao() / colunas;
-                int coluna = jogador.getPosicao() % colunas;
-                tabuleiroVisual[linha][coluna].add(jogador);
-            }
+            int linha = pos / colunas;
+            int coluna = pos % colunas;
+            tabuleiroVisual[linha][coluna].add(jogador);
         }
     }
+    public void printTabuleiro() {
 
-    public void imprimirTabuleiroVisual() {
-        System.out.println("\n============= Tabuleiro Visual =============");
-        for (int i = 0; i < linhas; i++) {
-            for (int j = 0; j < colunas; j++) {
-                int numeroCasa = i * colunas + j;
-                if (numeroCasa >= totalCasas){
-                break;
+        System.out.println("\n--- Tabuleiro Visual ---");
+        for (int i = 0; i < casas.size(); i++) {
+            if ((i % 10 == 0) && i != 0) {
+                System.out.print("\n");
+            }
+            StringBuilder conteudo = new StringBuilder();
+            for (Jogador j : gerenciadorJogadores.getJogadores()) {
+                if (j.getPosicao() == i) {
+                    if (conteudo.length() > 0) {
+                        conteudo.append(", ");
+                    }
+                    conteudo.append(j.getCor());
                 }
-            System.out.print(numeroCasa + ".[" + tabuleiroVisual[i][j].size() + "]\t");
             }
-        System.out.println();
-        }
-        int jogadoresNaUltimaCasa = 0;
-        for (Jogador jogador : gerenciadorJogadores.getJogadores()) {
-            if (jogador.getPosicao() == totalCasas) {
-                jogadoresNaUltimaCasa++;
+            if (conteudo.length() > 0) {
+                System.out.print(i + ".[ " + conteudo + " ]\t");
+            } else {
+                System.out.print(i + ".[  ]\t");
             }
         }
-        System.out.println(totalCasas + ".[" + jogadoresNaUltimaCasa + "]");
-        System.out.println("=================================");
         legendaJogadores();
     }
-    
+
     public void legendaJogadores(){
     System.out.println("\nLegenda dos Jogadores:");
         for (Jogador jogador : gerenciadorJogadores.getJogadores()) {
@@ -84,30 +93,31 @@ public class Tabuleiro {
         System.out.println("=================================\n");
     }
 
-    
-
-    // os métodos abaixo provavelmnete vão desaparecer com a utilização do facade e refatoração geral de classes. 
-    // por enquanto estarão aí pro funcionamento prévio do código
-
     public boolean adicionarJogador(Jogador jogador) {
         return gerenciadorJogadores.adicionarJogador(jogador);
     }
-
-
     public boolean inicarJogo() {
         return gerenciadorJogadores.validarTiposDeJogadores();
     }
     public void jogarRodada(boolean modoDebug) {
         List<Jogador> jogadores = gerenciadorJogadores.getJogadores();
-        if (verificaVazio(jogadores)){
+
+        if (jogadores.isEmpty()) {
+            System.out.println("Adicione jogadores para poder jogar uma nova partida");
             return;
         }
+
         for (Jogador jogador : jogadores) {
-            if(pularRodada(jogadores)) {
+            if (jogador.isPularRodada()) {
+                jogador.setPularRodada(false);
+                System.out.println("O jogador " + jogador.getCor() + " está pulando a rodada");
                 continue;
             }
+
             jogador.setJogadas(jogador.getJogadas() + 1);
-            boolean repetirJogada;
+
+            boolean tirouNumIguais = false;
+            boolean caiuNaCasaJogaDenovo;
             do {
                 int[] dados = null;
                 int soma = 0;
@@ -128,13 +138,17 @@ public class Tabuleiro {
                         }
                     }
                     jogador.avancar(opc);
+                    if (jogador.getPosicao() >= this.totalCasas) {
+                        jogador.setPosicao(this.totalCasas - 1);
+                    }
 
-                    if (gerenciadorJogadores.verificarVencedor(totalCasas) != null) {
+                    if (jogador.getPosicao() >= this.totalCasas - 1) {
                         vencer(jogador, jogadores);
                         return;
                     }
                     casasEspeciais(jogador, jogadores);
-                    repetirJogada = false;
+                    caiuNaCasaJogaDenovo = jogador.isJogarNovamente();
+                    jogador.setJogarNovamente(false);
                 } else {
                     System.out.println("=============================================");
                     System.out.println("Turno do jogador: " + jogador.getCor());
@@ -144,22 +158,94 @@ public class Tabuleiro {
                     soma = dados[0] + dados[1];
                     System.out.println("Dados rolados: " + dados[0] + " + " + dados[1] + " = " + soma);
                     jogador.avancar(soma);
+                    if (jogador.getPosicao() >= this.totalCasas) {
+                        jogador.setPosicao(this.totalCasas - 1);
+                    }
 
-                    if (gerenciadorJogadores.verificarVencedor(totalCasas) != null) {
+                    if (jogador.getPosicao() >= this.totalCasas - 1) {
                         vencer(jogador, jogadores);
                         return;
                     }
                     casasEspeciais(jogador, jogadores);
-                    repetirJogada = (dados[0] == dados[1]);
+                    tirouNumIguais = (dados[0] == dados[1]);
+                    caiuNaCasaJogaDenovo = jogador.isJogarNovamente();
                 }
                 System.out.println("O jogador " + jogador.getCor() + " está na casa " + jogador.getPosicao());
-                if (repetirJogada) {
+                if (tirouNumIguais) {
                     System.out.println("O jogador " + jogador.getCor() + " tirou valores iguais e jogará novamente");
                 }
-            } while (repetirJogada);
+            } while (tirouNumIguais || caiuNaCasaJogaDenovo);
         }
     }
+    public int perguntarNumeroDeCasas() {
+        System.out.print("Digite o número de casas do tabuleiro: ");
 
+        while (!scanner.hasNextInt()) {
+            System.out.println("Entrada inválida. Digite um número inteiro:");
+            scanner.next(); // não libera entrada inválida
+        }
+
+        int casas = scanner.nextInt();
+        scanner.nextLine(); // limpa a quebra de linha
+
+        while (casas <= 0) {
+            System.out.print("Número deve ser maior que zero. Tente novamente: ");
+            while (!scanner.hasNextInt()) {
+                System.out.println("Entrada inválida. Digite um número inteiro:");
+                scanner.next();
+
+                casas = scanner.nextInt();
+                scanner.nextLine(); // limpa a quebra de linha
+            }
+        }
+        return casas;
+    }
+    private void inicializarTabuleiroVisual() {
+        this.colunas = 10;
+        this.linhas = totalCasas / 10;
+        if (totalCasas % 10 != 0) {
+            this.linhas++;
+        }
+        this.tabuleiroVisual = new List[linhas][colunas];
+        for (int i = 0; i < linhas; i++) {
+            for (int j = 0; j < colunas; j++) {
+                tabuleiroVisual[i][j] = new ArrayList<>();
+            }
+        }
+    }
+    public void configCasas(int totalCasas) {
+        this.totalCasas = totalCasas;
+        criarTabNormal(totalCasas);
+        inicializarTabuleiroVisual();
+        int quantCasasEspeciais = lerInt("Digite quantas casas especiais você deseja adicionar");
+        if(quantCasasEspeciais == 0){
+            criarTabNormal(totalCasas);
+            return;
+        }
+        for (int i = 0; i < quantCasasEspeciais; i++) {
+            int posCasaEspecial = adicionarPosCasaEspecial("Digite a posição (0 a " + (totalCasas -1) + ") da " + (i + 1) + "º casa especial que você deseja adicionar: ");
+            System.out.println("===============================================================================");
+            System.out.println("Escolha o tipo da Casa Especial que estará na posição " + posCasaEspecial + " :");
+            System.out.println("===============================================================================");
+            int tipoCasa = lerInt("1 -  Casa Mágica\n2 -  Casa da Sorte\n3 -  Casa Stop\n4 -  Casa Surpresa\n5 -  Casa Volta\n6 -  Casa Azar\n7 -  Casa Jogar Novamente");
+            System.out.println("===============================================================================\n\n");
+            casas.set(posCasaEspecial, CasasFactory.criarCasa(tipoCasa, posCasaEspecial));
+        }
+    }
+    public int adicionarPosCasaEspecial(String prompt) {
+        int posicao;
+        do {
+            posicao = lerInt(prompt, 0, totalCasas - 1);
+            if(existeCasa(posicao)){
+                System.out.println("Já existe uma casa especial na posição " + posicao + "\nTente Novamente!");
+            }
+        } while (existeCasa(posicao));
+        return posicao;
+    }
+    public boolean existeCasa(int posCasaEspecial) {
+        Casa casa = casas.get(posCasaEspecial);
+        return !(casa instanceof CasaNormal);
+    }
     private void vencer(Jogador jogador, List<Jogador> jogadores) {
         System.out.println("=============================================");
         System.out.println("O jogador " + jogador.getCor() + " venceu!");
@@ -171,41 +257,39 @@ public class Tabuleiro {
 
     public void casasEspeciais(Jogador jogador, List<Jogador> jogadores) {
         int pos = jogador.getPosicao();
-        if (pos == 10 || pos == 25 || pos == 38) {
-            new CasaStop(pos).aplicarEfeito(jogador, jogadores);
-        } else if (pos == 13) {
-            new CasaSurpresa(pos).aplicarEfeito(jogador, jogadores);
-        } else if (pos == 5 || pos == 15 || pos == 30) {
-            new CasaSorte(pos).aplicarEfeito(jogador, jogadores);
-        } else if (pos == 17 || pos == 27) {
-            new CasaVolta(pos).aplicarEfeito(jogador, jogadores);
-        } else if (pos == 20 || pos == 35) {
-            new CasaMagica(pos).aplicarEfeito(jogador, jogadores);
+        if (pos >= 0 && pos < casas.size()) {
+            casas.get(pos).aplicarEfeito(jogador, jogadores);
         }
     }
-    public boolean verificaVazio(List<Jogador> jogadores) {
-        if (jogadores.isEmpty()) {
-            System.out.println("Adicione jogadores para poder jogar uma nova partida");
-            return true;
+    /** Lê um inteiro genérico */
+    public int lerInt(String prompt) {
+        System.out.print(prompt);
+        while (!scanner.hasNextInt()) {
+            System.out.print("Entrada inválida. " + prompt);
+            scanner.nextLine();
         }
-        return false;
+        int val = scanner.nextInt();
+        scanner.nextLine();
+        return val;
     }
-    public boolean pularRodada(List<Jogador> jogadores){
-        for(Jogador jogador : jogadores) {
-            if (jogador.isPularRodada()){
-                System.out.println("O jogador " + jogador.getCor() + " está pulando a rodada!");
-                return true;
+
+    /** Lê um inteiro dentro de um intervalo [min..max] */
+    public int lerInt(String prompt, int min, int max) {
+        int val;
+        do {
+            val = lerInt(prompt);
+            if (val < min || val > max) {
+                System.out.printf("Valor deve estar entre %d e %d.%n", min, max);
             }
-        }
-        return false;
+        } while (val < min || val > max);
+        return val;
+    }
+    public void setCasas(ArrayList<Casa> casas) {
+        this.casas = casas;
     }
 
     public ArrayList<Casa> getCasas() {
         return casas;
-    }
-
-    public void setCasas(ArrayList<Casa> casas) {
-        this.casas = casas;
     }
 
     public Random getRandom() {
@@ -225,5 +309,17 @@ public class Tabuleiro {
         for (Jogador j : jogadores) {
             this.gerenciadorJogadores.adicionarJogador(j);
         }
+    }
+    public boolean isNovoTabuleiro() {
+        return novoTabuleiro;
+    }
+    public void setNovoTabuleiro(boolean novoTabuleiro) {
+        this.novoTabuleiro = novoTabuleiro;
+    }
+    public Scanner getScanner() {
+        return scanner;
+    }
+    public void setScanner(Scanner scanner) {
+        this.scanner = scanner;
     }
 }

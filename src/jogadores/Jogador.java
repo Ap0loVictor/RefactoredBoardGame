@@ -5,6 +5,7 @@ public abstract class Jogador {
     protected Cor cor;
     protected int posicao;
     protected boolean pularRodada;
+    protected boolean jogarNovamente;
     protected int jogadas;
     protected Jogador(Cor cor){
         this.cor = cor;
@@ -13,7 +14,10 @@ public abstract class Jogador {
         this.jogadas = 0;
     }
     public void avancar(int casas){
-        posicao += casas;
+        this.posicao += casas;
+    }
+    public void voltar(int casas) {
+        this.posicao -= casas;
     }
     public abstract int[] rolarDados(Random random);
 
@@ -43,4 +47,11 @@ public abstract class Jogador {
         this.posicao = posicao;
     }
 
+    public boolean isJogarNovamente() {
+        return jogarNovamente;
+    }
+
+    public void setJogarNovamente(boolean jogarNovamente) {
+        this.jogarNovamente = jogarNovamente;
+    }
 }
