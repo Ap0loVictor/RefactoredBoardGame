@@ -122,10 +122,10 @@ public class Jogo {
         }
 
         System.out.println("\n--- Iniciando Jogo ---");
+        System.out.println("\n1- Inserir Casas   2- Rolar Dados");
+        int opc = lerInt("Escolha uma opção: ");
+        boolean inserirCasas = (opc == 1);
         while (true) {
-            System.out.println("\n1- Inserir Casas   2- Rolar Dados");
-            int opc = lerInt("Escolha uma opção: ");
-            boolean inserirCasas = (opc == 1);
             tabuleiro.jogarRodada(inserirCasas);
 
             tabuleiro.atualizarTabuleiroVisual();
