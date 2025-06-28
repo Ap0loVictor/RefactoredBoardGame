@@ -19,7 +19,7 @@ public class Jogo {
         this.scanner = new Scanner(System.in);
         this.tabuleiro = new Tabuleiro(0);
         this.coresDisponiveis = new ArrayList<>(
-            Arrays.asList("Vermelho", "Verde", "Azul", "Amarelo", "Preto", "Branco"));
+            Arrays.asList("Vermelho", "Verde", "Azul", "Amarelo", "Preto", "Rosa"));
     }
 
     public void printMenuCasas() {

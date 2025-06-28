@@ -15,10 +15,10 @@ public class Cor {
         switch (nomeCor) {
             case "VERMELHO": return "\u001B[31m";
             case "VERDE": return "\u001B[32m";
-            case "AZUL": return "\u001B[34m";
+            case "AZUL": return "\u001B[38;5;39m"; 
             case "AMARELO": return "\u001B[33m";
             case "PRETO": return "\u001B[30m";
-            case "BRANCO": return "\u001B[37m";
+            case "ROSA": return "\u001B[95m";
             default:
                 return "";
         }
