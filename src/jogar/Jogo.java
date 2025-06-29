@@ -217,7 +217,18 @@ public class Jogo {
         }
     }
 
+    public void jogarRodada(boolean modoDebug) {  // Facade
+        ArrayList<Jogador> jogadores = tabuleiro.getJogadores();
 
+        for (Jogador jogador : jogadores) {
+            if (verificarPulante(jogador)) {
+                continue;
+            }
+            boolean tirouNumIguais = false;
+            boolean caiuNaCasaJogaDenovo = false;
+            jogarEnquantoJogaNovamente(jogador, jogadores, modoDebug, tirouNumIguais, caiuNaCasaJogaDenovo);
+        }
+    }
     public boolean verificarPulante(Jogador jogador) { 
         if (jogador.isPularRodada()) {
             jogador.setPularRodada(false);
@@ -227,76 +238,59 @@ public class Jogo {
         return false;
     }
 
-    public void jogarRodada(boolean modoDebug) {  // Facade
-        ArrayList<Jogador> jogadores = tabuleiro.getJogadores();
-
-        for (Jogador jogador : jogadores) {
-            if (verificarPulante(jogador)) {
-                jogador.setPularRodada(false);
-                System.out.println("O jogador " + jogador.getCor() + " está pulando a rodada");
-                continue;
-            }
-
+    public void jogarEnquantoJogaNovamente(Jogador jogador, List<Jogador> jogadores, boolean modoDebug, boolean tirouNumIguais, boolean caiuNaCasaJogaDenovo) { // Facade
+        do {
             jogador.setJogadas(jogador.getJogadas() + 1);
-
-            boolean tirouNumIguais = false;
-            boolean caiuNaCasaJogaDenovo;
-            do {
-                int[] dados = null;
-                int soma = 0;
-
-                if (modoDebug) {
-                    int opc = -1;
-                    while (opc < 0) {
-                        System.out.println("=============================================");
-                        System.out.print("Informe o número de casas que o jogador " + jogador.getCor() + " deve avançar: ");
-                        String entrada = scanner.nextLine();
-                        try {
-                            opc = Integer.parseInt(entrada);
-                            if (opc < 0) {
-                                System.out.println("Digite um número positivo.");
-                            }
-                        } catch (NumberFormatException e) {
-                            System.out.println("Entrada inválida. Digite apenas números inteiros.");
-                        }
-                    }
-                    jogador.avancar(opc);
-                    if (jogador.getPosicao() >= tabuleiro.getTotalCasas()) {
-                        jogador.setPosicao(tabuleiro.getTotalCasas() - 1);
-                        vencer(jogador, jogadores);
-                        return;
-                    }
-                    tabuleiro.casasEspeciais(jogador, jogadores);
-                    caiuNaCasaJogaDenovo = jogador.isJogarNovamente();
-                    jogador.setJogarNovamente(false);
-                } else {
-                    System.out.println("=============================================");
-                    System.out.println("Turno do jogador: " + jogador.getCor());
-                    System.out.println("Pressione ENTER para jogar");
-                    scanner.nextLine();
-                    dados = jogador.rolarDados(random);
-                    soma = dados[0] + dados[1];
-                    System.out.println("Dados rolados: " + dados[0] + " + " + dados[1] + " = " + soma);
-                    jogador.avancar(soma);
-                    if (jogador.getPosicao() >= tabuleiro.getTotalCasas()) {
-                        jogador.setPosicao(tabuleiro.getTotalCasas() - 1);
-                        vencer(jogador, jogadores);
-                        return;
-                    }
-                    
-                    tabuleiro.casasEspeciais(jogador, jogadores);
-                    tirouNumIguais = (dados[0] == dados[1]);
-                    caiuNaCasaJogaDenovo = jogador.isJogarNovamente();
-                }
-                System.out.println("O jogador " + jogador.getCor() + " está na casa " + jogador.getPosicao());
-                if (tirouNumIguais) {
-                    System.out.println("O jogador " + jogador.getCor() + " tirou valores iguais e jogará novamente");
-                }
+            int[] dados = null;
+            int soma = 0;
+            verificarModo(modoDebug, jogador, jogadores, dados, soma, tirouNumIguais, caiuNaCasaJogaDenovo);
+            System.out.println("O jogador " + jogador.getCor() + " está na casa " + jogador.getPosicao());
+            verificarNumeroIguais(tirouNumIguais, jogador);
             } while (tirouNumIguais || caiuNaCasaJogaDenovo);
+    }
+
+    public void verificarModo(boolean modoDebug, Jogador jogador, List<Jogador> jogadores, int[] dados, int soma, boolean caiuNaCasaJogaDenovo, boolean tirouNumIguais) { // Facade
+        if (modoDebug) {
+            jogarNoModo(modoDebug, jogador, jogadores, caiuNaCasaJogaDenovo);
+        } 
+        else {
+            jogarNoModo(jogador, jogadores, dados, soma, caiuNaCasaJogaDenovo, tirouNumIguais);
         }
     }
+
+    public void jogarNoModo(boolean modoDebug, Jogador jogador, List<Jogador> jogadores, boolean caiuNaCasaJogaDenovo) { 
+        int escolha = lerInt("\n ---- Informe a casa que o jogador " + jogador.getCor() + " deve estar:\n Casa escolhida: ", 0, tabuleiro.getTotalCasas()-1);
+                jogador.setPosicao(escolha);
+                if (verificarVencedor(jogador, jogadores)) {
+                    return;
+                }
+                tabuleiro.casasEspeciais(jogador, jogadores);
+                caiuNaCasaJogaDenovo = jogador.isJogarNovamente();
+                jogador.setJogarNovamente(false);
+        }
+    public void jogarNoModo(Jogador jogador, List<Jogador> jogadores, int[] dados, int soma, boolean caiuNaCasaJogaDenovo, boolean tirouNumIguais) { // Facade
+        lerEnter("\n ---- Turno do jogador: " + jogador.getCor() + " ----\nPressione ENTER para jogar");
+                dados = jogador.rolarDados(random);
+                soma = dados[0] + dados[1];
+                System.out.println("Dados rolados: " + dados[0] + " + " + dados[1] + " = " + soma);                
+                jogador.avancar(soma);
+                if (verificarVencedor(jogador, jogadores)) {
+                    return;
+                }
+                tabuleiro.casasEspeciais(jogador, jogadores);
+                tirouNumIguais = (dados[0] == dados[1]);
+                caiuNaCasaJogaDenovo = jogador.isJogarNovamente();                    
+    }
+    public boolean verificarVencedor(Jogador jogador, List<Jogador> jogadores) { 
+        if (jogador.getPosicao() >= tabuleiro.getTotalCasas()) {
+            jogador.setPosicao(tabuleiro.getTotalCasas() - 1);
+            vencer(jogador, jogadores);
+            return true;
+        }
+        return false;
+    }
     
-    private void vencer(Jogador jogador, List<Jogador> jogadores) { // Facade
+    private void vencer(Jogador jogador, List<Jogador> jogadores) { 
         System.out.println("=============================================");
         System.out.println("O jogador " + jogador.getCor() + " venceu!");
         for (Jogador j : jogadores) {
@@ -304,8 +298,17 @@ public class Jogo {
         }
         System.out.println("=============================================");
     }
-    
 
+    public void lerEnter(String prompt) {
+        System.out.print(prompt);
+        scanner.nextLine();
+    }
+
+    public void verificarNumeroIguais(boolean tirouNumIguais, Jogador jogador) { 
+        if (tirouNumIguais) {
+            System.out.println("O jogador " + jogador.getCor() + " tirou valores iguais e jogará novamente");
+        }
+    }
 
     public List<String> getCoresDisponiveis() {
         return coresDisponiveis;
