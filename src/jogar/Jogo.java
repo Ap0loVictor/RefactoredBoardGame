@@ -18,6 +18,7 @@ public class Jogo {
     private final Tabuleiro tabuleiro;
     private final List<String> coresDisponiveis;
     private boolean podeAdicionar = true;
+    private boolean temVencedor = false; 
     private static final String THE_PLAYER = "O jogador ";
 
     public Jogo() {
@@ -67,6 +68,9 @@ public class Jogo {
             Jogador vencedor = verificarVencedor(tabuleiro.getCasas().size());
             printMenu(vencedor == null);
             opc = lerInt("Escolha uma opção: ", 1, 3);
+            if (vencedor != null) {
+               opc = 3;
+            }
             switch (opc) {
                 case 1:
                     if (tabuleiro.getJogadores().size() < 6 && podeAdicionar) {
@@ -89,6 +93,7 @@ public class Jogo {
                 default:
                     System.out.println("Opção inválida.");
             }
+            
         } while (opc != 3);
 
         scanner.close();
@@ -220,8 +225,6 @@ public class Jogo {
             printTabuleiro();
             Jogador vencedor = verificarVencedor(tabuleiro.getCasas().size());
             if (vencedor != null) {
-                System.out.println("  ---- Fim de jogo ----\n" + THE_PLAYER + vencedor.getCor() + " venceu!");
-                printTabuleiro();
                 break;
             }
         }
@@ -236,6 +239,9 @@ public class Jogo {
             }
             boolean caiuNaCasaJogaDenovo = false;
             jogarEnquantoJogaNovamente(jogador, jogadores, modoDebug, caiuNaCasaJogaDenovo);
+            if (temVencedor) {
+                break; 
+            }
         }
     }
     public boolean verificarPulante(Jogador jogador) { 
@@ -252,54 +258,50 @@ public class Jogo {
             jogador.setJogadas(jogador.getJogadas() + 1);
             int[] dados = null;
             int soma = 0;
-            boolean vencedorVerificado = verificarModo(modoDebug, jogador, jogadores, dados, soma, caiuNaCasaJogaDenovo);
-            if (vencedorVerificado) {
-                return;
-            }
+            verificarModo(modoDebug, jogador, jogadores, dados, soma, caiuNaCasaJogaDenovo);
             System.out.println(THE_PLAYER + jogador.getCor() + " está na casa " + jogador.getPosicao());
             verificarNumeroIguais(tabuleiro.isNumerosIguais(), jogador);
             } while (tabuleiro.isNumerosIguais() || caiuNaCasaJogaDenovo);
     }
 
-    public boolean verificarModo(boolean modoDebug, Jogador jogador, List<Jogador> jogadores, int[] dados, int soma, boolean caiuNaCasaJogaDenovo) { // Facade
+    public void verificarModo(boolean modoDebug, Jogador jogador, List<Jogador> jogadores, int[] dados, int soma, boolean caiuNaCasaJogaDenovo) { // Facade
         if (modoDebug) {
-            return jogarNoModo(modoDebug, jogador, jogadores, caiuNaCasaJogaDenovo);
+            jogarNoModo(modoDebug, jogador, jogadores, caiuNaCasaJogaDenovo);
         } 
         else {
-            
-            return jogarNoModo(jogador, jogadores, dados, soma, caiuNaCasaJogaDenovo);
+            jogarNoModo(jogador, jogadores, dados, soma, caiuNaCasaJogaDenovo);
         }
     }
 
-    public boolean jogarNoModo(boolean modoDebug, Jogador jogador, List<Jogador> jogadores, boolean caiuNaCasaJogaDenovo) { 
+    public void jogarNoModo(boolean modoDebug, Jogador jogador, List<Jogador> jogadores, boolean caiuNaCasaJogaDenovo) { 
         int escolha = lerInt("\n ---- Informe a casa que o jogador " + jogador.getCor() + " deve estar:\n Casa escolhida: ", 0, tabuleiro.getTotalCasas()-1);
                 jogador.setPosicao(escolha);
                 if (verificarVencedor(jogador, jogadores)) {
-                    return true;
+                    return;
                 }
                 tabuleiro.casasEspeciais(jogador, jogadores);
                 caiuNaCasaJogaDenovo = jogador.isJogarNovamente();
                 jogador.setJogarNovamente(false);
-                return false;
         }
-    public boolean jogarNoModo(Jogador jogador, List<Jogador> jogadores, int[] dados, int soma, boolean caiuNaCasaJogaDenovo) { // Facade
+    public void jogarNoModo(Jogador jogador, List<Jogador> jogadores, int[] dados, int soma, boolean caiuNaCasaJogaDenovo) { // Facade
         lerEnter("\n ---- Turno do jogador: " + jogador.getCor() + " ----\nPressione ENTER para jogar");
                 dados = jogador.rolarDados(random);
                 soma = dados[0] + dados[1];
                 System.out.println("Dados rolados: " + dados[0] + " + " + dados[1] + " = " + soma);                
                 jogador.avancar(soma);
                 if (verificarVencedor(jogador, jogadores)) {
-                    return true;
+                    return;
                 }
                 tabuleiro.casasEspeciais(jogador, jogadores);
-                tabuleiro.setNumerosIguais(dados[0] == dados[1]);;
-                caiuNaCasaJogaDenovo = jogador.isJogarNovamente();     
-                return false;               
+                tabuleiro.setNumerosIguais(dados[0] == dados[1]);
+                caiuNaCasaJogaDenovo = jogador.isJogarNovamente();
+                jogador.setJogarNovamente(false);                  
     }
     public boolean verificarVencedor(Jogador jogador, List<Jogador> jogadores) { 
-        if (jogador.getPosicao() >= tabuleiro.getTotalCasas()) {
+        if (jogador.getPosicao() >= tabuleiro.getTotalCasas()-1) {
             jogador.setPosicao(tabuleiro.getTotalCasas() - 1);
             vencer(jogador, jogadores);
+            temVencedor = true;
             return true;
         }
         return false;
