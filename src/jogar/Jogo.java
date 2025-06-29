@@ -141,7 +141,7 @@ public class Jogo {
     }
 
     private void fluxoJogar() {
-        if (!tabuleiro.inicarJogo()) {
+        if (!tabuleiro.iniciarJogo()) {
             System.out.println("Não podem haver apenas jogadores do mesmo tipo. Abortando Jogo!");
             return;
         }
