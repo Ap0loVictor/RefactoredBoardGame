@@ -164,6 +164,10 @@ public class Jogo {
         }
     }
 
+    // Jogar aqui a função marota.
+
+
+
     public List<String> getCoresDisponiveis() {
         return coresDisponiveis;
     }

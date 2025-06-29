@@ -7,7 +7,7 @@ import java.util.*;
 public class Tabuleiro {
     private Random random;
     private ArrayList<Casa> casas;
-    private ArrayList<Jogador> jogadores; // Essa merda não tá sendo usada ; Gui:KKKKKKKKK calma cara
+    private ArrayList<Jogador> jogadores; 
     private List<Jogador>[][] tabuleiroVisual;
     private Scanner scanner = new Scanner(System.in);
     private int totalCasas;
@@ -39,7 +39,7 @@ public class Tabuleiro {
             casas.add(i, CasasFactory.criarCasa(0,i));
         }
     }
-    public void atualizarTabuleiroVisual() {
+    public void atualizarTabuleiroVisual() { 
         for (int i = 0; i < linhas; i++) {
             for (int j = 0; j < colunas; j++) {
                 tabuleiroVisual[i][j].clear();
@@ -56,7 +56,7 @@ public class Tabuleiro {
             tabuleiroVisual[linha][coluna].add(jogador);
         }
     }
-    public void printTabuleiro() {
+    public void printTabuleiro() { // Facade
 
         System.out.println("\n--- Tabuleiro Visual ---");
         for (int i = 0; i < casas.size(); i++) {
@@ -81,7 +81,7 @@ public class Tabuleiro {
         legendaJogadores();
     }
 
-    public void legendaJogadores(){
+    public void legendaJogadores(){  // FACADE
     System.out.println("\nLegenda dos Jogadores:");
         for (Jogador jogador : getJogadores()) {
             System.out.println(jogador.getClass().getSimpleName() + " | " + jogador.getCor() + " | Posição " + jogador.getPosicao());
@@ -94,20 +94,15 @@ public class Tabuleiro {
         }
         return false;
     }
-    public boolean iniciarJogo() {
+    public boolean iniciarJogo() { 
         Set<Class<?>> tipos = new HashSet<>();
         for (Jogador j : jogadores) {
             tipos.add(j.getClass());
         }
         return tipos.size() >= 2;
     }
-    public void jogarRodada(boolean modoDebug) {
+    public void jogarRodada(boolean modoDebug) {  // Facade
         ArrayList<Jogador> jogadores = getJogadores();
-
-        if (jogadores.isEmpty()) {
-            System.out.println("Adicione jogadores para poder jogar uma nova partida");
-            return;
-        }
 
         for (Jogador jogador : jogadores) {
             if (jogador.isPularRodada()) {
@@ -179,29 +174,7 @@ public class Tabuleiro {
             } while (tirouNumIguais || caiuNaCasaJogaDenovo);
         }
     }
-    public int perguntarNumeroDeCasas() {
-        System.out.print("Digite o número de casas do tabuleiro: ");
 
-        while (!scanner.hasNextInt()) {
-            System.out.println("Entrada inválida. Digite um número inteiro:");
-            scanner.next(); // não libera entrada inválida
-        }
-
-        int casas = scanner.nextInt();
-        scanner.nextLine(); // limpa a quebra de linha
-
-        while (casas <= 0) {
-            System.out.print("Número deve ser maior que zero. Tente novamente: ");
-            while (!scanner.hasNextInt()) {
-                System.out.println("Entrada inválida. Digite um número inteiro:");
-                scanner.next();
-
-                casas = scanner.nextInt();
-                scanner.nextLine(); // limpa a quebra de linha
-            }
-        }
-        return casas;
-    }
     private void inicializarTabuleiroVisual() {
         this.colunas = 10;
         this.linhas = totalCasas / 10;
@@ -245,7 +218,7 @@ public class Tabuleiro {
         Casa casa = casas.get(posCasaEspecial);
         return !(casa instanceof CasaNormal);
     }
-    private void vencer(Jogador jogador, List<Jogador> jogadores) {
+    private void vencer(Jogador jogador, List<Jogador> jogadores) { // Facade
         System.out.println("=============================================");
         System.out.println("O jogador " + jogador.getCor() + " venceu!");
         for (Jogador j : jogadores) {
@@ -281,6 +254,8 @@ public class Tabuleiro {
         } while (val < min || val > max);
         return val;
     }
+
+    
     public void setCasas(ArrayList<Casa> casas) {
         this.casas = casas;
     }
