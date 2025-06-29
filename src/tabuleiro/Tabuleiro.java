@@ -12,6 +12,7 @@ public class Tabuleiro {
     private int totalCasas;
     private int linhas;
     private int colunas;
+    private boolean numerosIguais = false; 
 
     public Tabuleiro(int totalCasas) {
         
@@ -81,7 +82,7 @@ public class Tabuleiro {
             }
         }
     }
-    
+
     public void inicializarTabuleiros(int totalCasas) {  // Tabuleiro
         this.totalCasas = totalCasas;
         criarTabNormal(totalCasas);
@@ -104,6 +105,13 @@ public class Tabuleiro {
         }
     }
     
+    public boolean isNumerosIguais() {
+        return numerosIguais;
+    }
+    public void setNumerosIguais(boolean numerosIguais) {
+        this.numerosIguais = numerosIguais;
+    }
+
     public int getTotalCasas() {
         return totalCasas;
     }
