@@ -19,7 +19,7 @@ public class Jogo {
         this.scanner = new Scanner(System.in);
         this.tabuleiro = new Tabuleiro(0);
         this.coresDisponiveis = new ArrayList<>(
-            Arrays.asList("Vermelho", "Verde", "Azul", "Amarelo", "Preto", "Rosa"));
+            Arrays.asList("Vermelho", "Verde", "Azul", "Amarelo", "Cinza", "Rosa"));
     }
 
     public void printMenuCasas() {
@@ -29,17 +29,20 @@ public class Jogo {
     public void printMenuJogadores() {
         System.out.print("Digite o numero de jogadores na partida : ");
     }
+    public int lerQuantidadeJogadores() {
+        int quantidade = lerInt("Digite o número de jogadores (2 a 6): ", 2, 6); // apagar se eu n quiser usar ele
+        return quantidade;
+    }
     public void configTabuleiro(int numCasas) {
         tabuleiro.configCasas(numCasas);
     }
 
-    /** Inicia todo o fluxo do jogo */
     public void start() {
         int opc;
         do {
             Jogador vencedor = verificarVencedor(tabuleiro.getCasas().size());
             printMenu(vencedor == null);
-            opc = lerInt("Escolha uma opção: ");
+            opc = lerInt("Escolha uma opção: ", 1, 3);
             switch (opc) {
                 case 1:
                     if (tabuleiro.getJogadores().size() < 6 && podeAdicionar) {
@@ -65,6 +68,28 @@ public class Jogo {
         } while (opc != 3);
 
         scanner.close();
+    }
+
+    public int lerInt(String prompt, int min, int max) {
+        int val;
+        do {
+            val = lerInt(prompt);
+            if (val < min || val > max) {
+                System.out.printf("Valor deve estar entre %d e %d.%n", min, max);
+            }
+        } while (val < min || val > max);
+        return val;
+    }
+    
+    public int lerInt(String prompt) {
+        System.out.print(prompt);
+        while (!scanner.hasNextInt()) {
+            System.out.print("Entrada inválida. " + prompt);
+            scanner.nextLine();
+        }
+        int val = scanner.nextInt();
+        scanner.nextLine();
+        return val;
     }
 
     public Jogador verificarVencedor(int numCasas) {
@@ -100,7 +125,7 @@ public class Jogo {
     private void fluxoAdicionarJogador() {
         System.out.println("\n--- Cadastro de Jogador ---");
         System.out.println("1- Azarado   2- Sortudo   3- Normal");
-        int tipo = lerInt("Escolha o tipo: ");
+        int tipo = lerInt("Escolha o tipo: ", 1, 3);
 
         System.out.println("\n--- Escolha a cor ---");
         for (int i = 0; i < coresDisponiveis.size(); i++) {
@@ -116,14 +141,14 @@ public class Jogo {
     }
 
     private void fluxoJogar() {
-        if (!tabuleiro.inicarJogo()) {
+        if (!tabuleiro.iniciarJogo()) {
             System.out.println("Não podem haver apenas jogadores do mesmo tipo. Abortando Jogo!");
             return;
         }
 
         System.out.println("\n--- Iniciando Jogo ---");
         System.out.println("\n1- Inserir Casas   2- Rolar Dados");
-        int opc = lerInt("Escolha uma opção: ");
+        int opc = lerInt("Escolha uma opção: ", 1, 2);
         boolean inserirCasas = (opc == 1);
         while (true) {
             tabuleiro.jogarRodada(inserirCasas);
@@ -139,30 +164,6 @@ public class Jogo {
         }
     }
 
-
-    /** Lê um inteiro genérico */
-    public int lerInt(String prompt) {
-        System.out.print(prompt);
-        while (!scanner.hasNextInt()) {
-            System.out.print("Entrada inválida. " + prompt);
-            scanner.nextLine();
-        }
-        int val = scanner.nextInt();
-        scanner.nextLine();
-        return val;
-    }
-
-    /** Lê um inteiro dentro de um intervalo [min..max] */
-    public int lerInt(String prompt, int min, int max) {
-        int val;
-        do {
-            val = lerInt(prompt);
-            if (val < min || val > max) {
-                System.out.printf("Valor deve estar entre %d e %d.%n", min, max);
-            }
-        } while (val < min || val > max);
-        return val;
-    }
     public List<String> getCoresDisponiveis() {
         return coresDisponiveis;
     }

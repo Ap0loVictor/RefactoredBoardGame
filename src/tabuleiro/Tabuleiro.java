@@ -4,15 +4,11 @@ import casas.*;
 import factory.CasasFactory;
 import jogadores.Jogador;
 import java.util.*;
-import jogadores.GerenciadorJogadores;
-
 public class Tabuleiro {
-    private GerenciadorJogadores gerenciadorJogadores;
     private Random random;
     private ArrayList<Casa> casas;
-    private ArrayList<Jogador> jogadores;
+    private ArrayList<Jogador> jogadores; // Essa merda não tá sendo usada ; Gui:KKKKKKKKK calma cara
     private List<Jogador>[][] tabuleiroVisual;
-    private boolean novoTabuleiro = true;
     private Scanner scanner = new Scanner(System.in);
     private int totalCasas;
     private int linhas;
@@ -20,8 +16,8 @@ public class Tabuleiro {
 
     public Tabuleiro(int totalCasas) {
         this.random = new Random();
-        this.gerenciadorJogadores = new GerenciadorJogadores();
         this.totalCasas = totalCasas;
+        this.jogadores = new ArrayList<>();
         this.casas = new ArrayList<>();
         this.colunas = 10;
         this.linhas = totalCasas / 10;
@@ -49,7 +45,7 @@ public class Tabuleiro {
                 tabuleiroVisual[i][j].clear();
             }
         }
-        for (Jogador jogador : gerenciadorJogadores.getJogadores()) {
+        for (Jogador jogador : getJogadores()) {
             int pos = jogador.getPosicao();
             if (pos >= totalCasas) {
                 pos = totalCasas - 1;
@@ -68,7 +64,7 @@ public class Tabuleiro {
                 System.out.print("\n");
             }
             StringBuilder conteudo = new StringBuilder();
-            for (Jogador j : gerenciadorJogadores.getJogadores()) {
+            for (Jogador j : getJogadores()) {
                 if (j.getPosicao() == i) {
                     if (conteudo.length() > 0) {
                         conteudo.append(", ");
@@ -87,19 +83,26 @@ public class Tabuleiro {
 
     public void legendaJogadores(){
     System.out.println("\nLegenda dos Jogadores:");
-        for (Jogador jogador : gerenciadorJogadores.getJogadores()) {
+        for (Jogador jogador : getJogadores()) {
             System.out.println(jogador.getClass().getSimpleName() + " | " + jogador.getCor() + " | Posição " + jogador.getPosicao());
         }
     }
-
-    public boolean adicionarJogador(Jogador jogador) {
-        return gerenciadorJogadores.adicionarJogador(jogador);
+    public boolean adicionarJogador(Jogador jogador){
+        if(this.jogadores.size() < 6){
+            this.jogadores.add(jogador);
+            return true;
+        }
+        return false;
     }
-    public boolean inicarJogo() {
-        return gerenciadorJogadores.validarTiposDeJogadores();
+    public boolean iniciarJogo() {
+        Set<Class<?>> tipos = new HashSet<>();
+        for (Jogador j : jogadores) {
+            tipos.add(j.getClass());
+        }
+        return tipos.size() >= 2;
     }
     public void jogarRodada(boolean modoDebug) {
-        List<Jogador> jogadores = gerenciadorJogadores.getJogadores();
+        ArrayList<Jogador> jogadores = getJogadores();
 
         if (jogadores.isEmpty()) {
             System.out.println("Adicione jogadores para poder jogar uma nova partida");
@@ -285,35 +288,11 @@ public class Tabuleiro {
     public ArrayList<Casa> getCasas() {
         return casas;
     }
-
-    public Random getRandom() {
-        return random;
+    public ArrayList<Jogador> getJogadores() {
+        return jogadores;
     }
-
-    public void setRandom(Random random) {
-        this.random = random;
-    }
-
-    public List<Jogador> getJogadores() {
-        return gerenciadorJogadores.getJogadores();
-    }
-
     public void setJogadores(ArrayList<Jogador> jogadores) {
-        this.gerenciadorJogadores = new GerenciadorJogadores();
-        for (Jogador j : jogadores) {
-            this.gerenciadorJogadores.adicionarJogador(j);
-        }
-    }
-    public boolean isNovoTabuleiro() {
-        return novoTabuleiro;
-    }
-    public void setNovoTabuleiro(boolean novoTabuleiro) {
-        this.novoTabuleiro = novoTabuleiro;
-    }
-    public Scanner getScanner() {
-        return scanner;
-    }
-    public void setScanner(Scanner scanner) {
-        this.scanner = scanner;
+        this.jogadores = jogadores;
     }
 }
+
