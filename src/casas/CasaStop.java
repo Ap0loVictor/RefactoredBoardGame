@@ -10,7 +10,7 @@ public class CasaStop extends Casa {
     public void aplicarEfeito(Jogador jogador, List<Jogador> jogadores){
         jogador.setPularRodada(true);
         System.out.println("\nCasas.Casa Stop!!!");
-        System.out.println("O jogador" + jogador.getCor() + " caiu na casa " + indiceCasa + " e vai pular a próxima rodada");
+        System.out.println("O jogador " + jogador.getCor() + " caiu na casa " + indiceCasa + " e vai pular a próxima rodada");
     }
 }
 

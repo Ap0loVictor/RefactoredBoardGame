@@ -22,9 +22,9 @@ public class CasaMagica extends Casa {
             int temp = jogador.getPosicao();
             jogador.setPosicao(jogadorMenorPos.getPosicao());
             jogadorMenorPos.setPosicao(temp);
-            System.out.println("\nCasas.Casa mágica!!!\nO jogador deve trocar de lugar com o último jogador");
+            System.out.println("\nCasas Casa mágica!!!\nO jogador deve trocar de lugar com o último jogador");
             System.out.println(
-                    "O jogador " + jogador.getCor() + "trocou de lugar com o jogador " + jogadorMenorPos.getCor());
+                    "O jogador " + jogador.getCor() + " trocou de lugar com o jogador " + jogadorMenorPos.getCor());
         } else {
             System.out.println("O jogador " + jogador.getCor() + " já está na última posição!");
         }
