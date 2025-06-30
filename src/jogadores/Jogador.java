@@ -6,10 +6,12 @@ public abstract class Jogador {
     protected int posicao;
     protected boolean pularRodada;
     protected boolean jogarNovamente;
+    private boolean caiuNaCasaJogaDenovo; 
     protected int jogadas;
     protected Jogador(Cor cor){
         this.cor = cor;
         this.posicao = 0;
+        this.caiuNaCasaJogaDenovo = false; 
         this.pularRodada = false;
         this.jogadas = 0;
     }
@@ -34,6 +36,13 @@ public abstract class Jogador {
     public boolean isPularRodada() {
         return pularRodada;
     } 
+
+    public void setCaiuNaCasaJogaDenovo(boolean caiuNaCasaJogaDenovo) {
+        this.caiuNaCasaJogaDenovo = caiuNaCasaJogaDenovo;
+    }
+    public boolean isCaiuNaCasaJogaDenovo() {
+        return caiuNaCasaJogaDenovo;
+    }
     public Cor getCor() {
         return cor;
     }

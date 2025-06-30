@@ -261,7 +261,7 @@ public class Jogo {
             verificarModo(modoDebug, jogador, jogadores, dados, soma, caiuNaCasaJogaDenovo);
             System.out.println(THE_PLAYER + jogador.getCor() + " está na casa " + jogador.getPosicao());
             verificarNumeroIguais(tabuleiro.isNumerosIguais(), jogador);
-            } while (tabuleiro.isNumerosIguais() || caiuNaCasaJogaDenovo);
+            } while (tabuleiro.isNumerosIguais() || tabuleiro.isCaiuNaCasaJogaDenovo());
     }
 
     public void verificarModo(boolean modoDebug, Jogador jogador, List<Jogador> jogadores, int[] dados, int soma, boolean caiuNaCasaJogaDenovo) { // Facade
@@ -294,7 +294,7 @@ public class Jogo {
                 }
                 tabuleiro.casasEspeciais(jogador, jogadores);
                 tabuleiro.setNumerosIguais(dados[0] == dados[1]);
-                caiuNaCasaJogaDenovo = jogador.isJogarNovamente();
+                caiuNaCasaJogaDenovo = jogador.isJogarNovamente(); 
                 jogador.setJogarNovamente(false);                  
     }
     public boolean verificarVencedor(Jogador jogador, List<Jogador> jogadores) { 
