@@ -49,7 +49,7 @@ public class Tabuleiro {
             int pos = jogador.getPosicao();
             if (pos >= totalCasas) {
                 pos = totalCasas - 1;
-                jogador.setPosicao(pos); // força ficar na última casa
+                jogador.setPosicao(pos); 
             }
             int linha = pos / colunas;
             int coluna = pos % colunas;
@@ -83,17 +83,17 @@ public class Tabuleiro {
         }
     }
 
-    public void inicializarTabuleiros(int totalCasas) {  // Tabuleiro
+    public void inicializarTabuleiros(int totalCasas) {  
         this.totalCasas = totalCasas;
         criarTabNormal(totalCasas);
         inicializarTabuleiroVisual();
     }
    
-    public void setarCasaEspecial(int posCasaEspecial, int tipoCasa) { // Tabuleiro
+    public void setarCasaEspecial(int posCasaEspecial, int tipoCasa) { 
             casas.set(posCasaEspecial, CasasFactory.criarCasa(tipoCasa, posCasaEspecial));
     }
     
-    public boolean existeCasa(int posCasaEspecial) {  // Tabuleiro
+    public boolean existeCasa(int posCasaEspecial) {  
         Casa casa = casas.get(posCasaEspecial);
         return !(casa instanceof CasaNormal);
     }
