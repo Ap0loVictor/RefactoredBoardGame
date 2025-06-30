@@ -11,6 +11,6 @@ public class CasaJogaNovamente extends Casa {
     @Override
     public void aplicarEfeito(Jogador jogadorAtual, List<Jogador> jogadores) {
         System.out.println("Casa Jogar Novamente!!!\nO jogador " + jogadorAtual.getCor() + " caiu na casa Jogar Novamente.");
-        jogadorAtual.setJogarNovamente(true);
+        jogadorAtual.setCaiuNaCasaJogaDenovo(true);
     }
 }

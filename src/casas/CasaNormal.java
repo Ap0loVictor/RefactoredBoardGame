@@ -10,5 +10,7 @@ public class CasaNormal extends Casa {
     }
 
     @Override
-    public void aplicarEfeito(Jogador jogadorAtual, List<Jogador> jogadores) {}
+    public void aplicarEfeito(Jogador jogadorAtual, List<Jogador> jogadores) {
+        System.out.print("");
+    }
 }
